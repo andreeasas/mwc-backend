@@ -10,5 +10,5 @@ import com.mwc.domain.User;
 @Repository
 @RepositoryRestResource(path="user", collectionResourceRel="user")
 public interface UserRepository extends PagingAndSortingRepository<User, Long>, CrudRepository<User, Long> {
-
+	User findByUsername(String username);
 }

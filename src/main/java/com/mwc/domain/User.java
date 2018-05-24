@@ -50,7 +50,7 @@ public class User implements Serializable {
 	  public User(String username, String password, String name) {
 	    super();
 	    this.username = username;
-	    this.password = Utils.encrypt(password);
+	    this.password = password;//Utils.encrypt(password);
 	    this.name = name;
 	  }
 
