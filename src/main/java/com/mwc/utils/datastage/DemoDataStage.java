@@ -160,10 +160,10 @@ public class DemoDataStage {
       return user;
     }
 
-    // for setting connction between user and members. 
+    // for setting connection between user and members. 
     // Member = owner, so connection is only set by member.setUser(..); user.setMembers(..) won't set fk in db. 
     members.forEach(member -> {
-      member.setDbUser(user);
+      member.setUser(user);
     });
 
     // for saving the members automatically when saving the user (through cascade)

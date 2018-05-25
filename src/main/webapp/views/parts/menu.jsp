@@ -8,15 +8,22 @@
     <c:if test="${pageContext.request.userPrincipal.name != null}">
     <ul class="nav navbar-nav">
       <li class="active"><a href="#">Home</a></li>
+      
+      
       <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Select member <span class="caret"></span></a>
         <ul class="dropdown-menu">
-          <li><a href="#">Member 1</a></li>
-          <li><a href="#">Member 2</a></li>
-          <li><a href="#">Member 3</a></li>
+        <% if (session.getAttribute("members") == null) { %>
+        	<li><a href="#">Nothing to show</a></li>
+		<% } else {%>
+		    <c:forEach items='<%= session.getAttribute("members") %>' var="item">
+	    		<li><a href="#">${item.name}</a></li>
+			</c:forEach>
+		<% } %>
+        
         </ul>
       </li>
       <li><a href="#">Expenses</a></li>
-      <li><a href="#">Categories</a></li>
+      <li><a href="${contextPath}/categories">Categories</a></li>
       <li><a href="#">Statistics</a></li>
     </ul>
     </c:if>

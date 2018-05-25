@@ -1,7 +1,14 @@
 package com.mwc.controllers;
 
 
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -9,7 +16,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.mwc.domain.Member;
 import com.mwc.domain.User;
+import com.mwc.services.MemberService;
 import com.mwc.services.SecurityService;
 import com.mwc.services.UserService;
 import com.mwc.validator.UserValidator;
@@ -18,6 +27,8 @@ import com.mwc.validator.UserValidator;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private MemberService memberService;
 
     @Autowired
     private SecurityService securityService;
@@ -59,7 +70,16 @@ public class UserController {
     }
 
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
-    public String welcome(Model model) {
+    public String welcome(Model model, HttpServletRequest request) {
+//    	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    	User user = userService.findByUsername(authentication.getName());
+    	
+    	List<Member> members = memberService.getAllByUser(user.getId());
+    	
+    	request.getSession().setAttribute("members",members);
+    	
         return "welcome";
     }
 }

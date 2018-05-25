@@ -25,7 +25,6 @@ public class Member implements Serializable {
 	  private String name;
 
 	  @ManyToOne
-	  @JoinColumn(nullable = false)
 	  private User dbUser;
 
 	  @OneToMany(mappedBy = "member")
@@ -39,9 +38,9 @@ public class Member implements Serializable {
 	    this.name = name;
 	  }
 
-	  public Member(String name, User dbUser) {
+	  public Member(String name, User user) {
 	    this(name);
-	    this.dbUser = dbUser;
+	    this.dbUser = user;
 	  }
 
 	  public long getId() {
@@ -60,12 +59,12 @@ public class Member implements Serializable {
 	    this.name = name;
 	  }
 
-	  public User getDbUser() {
+	  public User getUser() {
 	    return dbUser;
 	  }
 
-	  public void setDbUser(User dbUser) {
-	    this.dbUser = dbUser;
+	  public void setUser(User user) {
+	    this.dbUser = user;
 	  }
 
 	  public List<Category> getCategories() {
