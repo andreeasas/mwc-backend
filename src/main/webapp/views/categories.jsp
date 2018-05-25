@@ -16,7 +16,7 @@
 <!--
 Data items are displayed in table cells.
 Each edit button has data-id="..." attribute to indicate the id of item
--->
+
 <div class="table-responsive">
     <table class="table table-bordered table-striped">
         <thead>
@@ -102,6 +102,130 @@ Each edit button has data-id="..." attribute to indicate the id of item
         </tbody>
     </table>
 </div>
+-->
+
+<h2>User categories</h2>
+<hr class="hr-separator">
+
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingOne">
+                <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <i class="more-less glyphicon glyphicon-plus"></i>
+                        Collapsible Group Item #1
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                      <button type="button" class="btn btn-secondary">Edit category</button>
+                      <button type="button" class="btn btn-danger">Delete category</button>
+                      <button type="button" class="btn btn-info">Add cost</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingTwo">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        <i class="more-less glyphicon glyphicon-plus"></i>
+                        Collapsible Group Item #2
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                <div class="panel-body">
+                    <button type="button" class="btn btn-secondary">Edit category</button>
+                     <button type="button" class="btn btn-danger">Delete category</button>
+                     <button type="button" class="btn btn-info">Add cost</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingThree">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        <i class="more-less glyphicon glyphicon-plus"></i>
+                        Collapsible Group Item #3
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                <div class="panel-body">
+                    <button type="button" class="btn btn-secondary">Edit category</button>
+                      <button type="button" class="btn btn-danger">Delete category</button>
+                      <button type="button" class="btn btn-info">Add cost</button>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- panel-group -->
+
+<h2>Member categories</h2>
+<hr class="hr-separator">
+
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingOne">
+                <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <i class="more-less glyphicon glyphicon-plus"></i>
+                        Collapsible Group Item #1
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                      <button type="button" class="btn btn-secondary">Edit category</button>
+                      <button type="button" class="btn btn-danger">Delete category</button>
+                      <button type="button" class="btn btn-info">Add cost</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingTwo">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        <i class="more-less glyphicon glyphicon-plus"></i>
+                        Collapsible Group Item #2
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                <div class="panel-body">
+                    <button type="button" class="btn btn-secondary">Edit category</button>
+                     <button type="button" class="btn btn-danger">Delete category</button>
+                     <button type="button" class="btn btn-info">Add cost</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingThree">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        <i class="more-less glyphicon glyphicon-plus"></i>
+                        Collapsible Group Item #3
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                <div class="panel-body">
+                    <button type="button" class="btn btn-secondary">Edit category</button>
+                      <button type="button" class="btn btn-danger">Delete category</button>
+                      <button type="button" class="btn btn-info">Add cost</button>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- panel-group -->
+
 
 <!-- The form which is used to populate the item data -->
 <form id="userForm" method="post" class="form-horizontal" style="display: none;">

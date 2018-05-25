@@ -1,4 +1,7 @@
 $(document).ready(function() {
+	$('.panel-group').on('hidden.bs.collapse', toggleIcon);
+	$('.panel-group').on('shown.bs.collapse', toggleIcon);
+	
     $('#userForm')
         .on('submit', function(e) {
             // Save the form data via an Ajax request
@@ -69,4 +72,13 @@ $(document).ready(function() {
                 .modal('show');
         }});
     });
+    
+    
 });
+
+function toggleIcon(e) {
+    $(e.target)
+        .prev('.panel-heading')
+        .find(".more-less")
+        .toggleClass('glyphicon-plus glyphicon-minus');
+}

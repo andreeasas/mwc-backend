@@ -79,6 +79,7 @@ public class UserController {
     	List<Member> members = memberService.getAllByUser(user.getId());
     	
     	request.getSession().setAttribute("members",members);
+    	request.getSession().setAttribute("authUser",user);
     	
         return "welcome";
     }
