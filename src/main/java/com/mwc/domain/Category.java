@@ -41,10 +41,18 @@ public class Category implements Serializable {
 	  @ManyToOne
 	  private Member member;
 
-	public Category() {
+	  public Category() {
 	  }
 
-	  public long getId() {
+	  public Category(String name, Category parent, User dbUser, Member member) {
+		super();
+		this.name = name;
+		this.parent = parent;
+		this.dbUser = dbUser;
+		this.member = member;
+	}
+
+	public long getId() {
 	    return id;
 	  }
 

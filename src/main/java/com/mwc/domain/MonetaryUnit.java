@@ -26,9 +26,10 @@ public class MonetaryUnit implements Serializable {
 	  public MonetaryUnit() {
 	  }
 
-	  public MonetaryUnit(String code) {
+	  public MonetaryUnit(String code, String description) {
 	    super();
 	    this.code = code;
+	    this.description = description;
 	  }
 
 	  public String getCode() {

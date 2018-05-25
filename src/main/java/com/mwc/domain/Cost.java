@@ -2,6 +2,8 @@ package com.mwc.domain;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -10,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class Cost implements Serializable {
@@ -35,15 +39,15 @@ public class Cost implements Serializable {
 
 	  private double value;
 
-	  @Basic
-	  private LocalDate costDate;
+	  @Temporal(TemporalType.DATE)
+	  private Date costDate;
 
 	  private String description;
 
 	  public Cost() {
 	  }
 
-	  public Cost(User user, Member member, Category category, MonetaryUnit um, Double value, LocalDate costDate, String description) {
+	  public Cost(User user, Member member, Category category, MonetaryUnit um, Double value, Date costDate, String description) {
 	    super();
 	    this.dbUser = user;
 	    this.member = member;
@@ -102,11 +106,11 @@ public class Cost implements Serializable {
 	    this.value = value;
 	  }
 
-	  public LocalDate getCostDate() {
+	  public Date getCostDate() {
 	    return costDate;
 	  }
 
-	  public void setCostDate(LocalDate costDate) {
+	  public void setCostDate(Date costDate) {
 	    this.costDate = costDate;
 	  }
 
