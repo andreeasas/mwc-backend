@@ -53,7 +53,7 @@
 <hr class="hr-separator-thin">
 
 	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-		<c:forEach var="category" items="${userSpecificCategories}" varStatus="loop">
+		<c:forEach var="category" items="${memberSpecificCategories}" varStatus="loop">
 			<div class="panel panel-default">
 	            <div class="panel-heading" role="tab" id="heading_${loop.index}">
 	                <h4 class="panel-title">

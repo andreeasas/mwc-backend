@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.mwc.domain.Category;
 import com.mwc.domain.Member;
 import com.mwc.domain.User;
+import com.mwc.services.CategoryService;
 import com.mwc.services.MemberService;
 import com.mwc.services.SecurityService;
 import com.mwc.services.UserService;
@@ -25,8 +27,10 @@ import com.mwc.validator.UserValidator;
 
 @Controller
 public class UserController {
+	
     @Autowired
     private UserService userService;
+    
     @Autowired
     private MemberService memberService;
 
@@ -60,11 +64,11 @@ public class UserController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model, String error, String logout) {
-        if (error != null)
-            model.addAttribute("error", "Your username and password is invalid.");
+        if (error != null) {
+            model.addAttribute("error", "Your username and password is invalid.");}
 
-        if (logout != null)
-            model.addAttribute("message", "You have been logged out successfully.");
+        if (logout != null) {
+            model.addAttribute("message", "You have been logged out successfully.");}
 
         return "login";
     }

@@ -11,6 +11,7 @@ import com.mwc.repositories.MemberRepository;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
+	
 	private CategoryRepository categoryRepository;
 	
 	@Autowired
@@ -19,38 +20,28 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
 	@Override
-	public List<Category> getAllByUser(long userId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<Category> getUserSpecific(long userId) {
 		return categoryRepository.findAllUserSpecific(userId);
 	}
 
 	@Override
-	public List<Category> getMemberSpecific(long memberId) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Category> getMemberSpecific(long userId) {
+		return categoryRepository.findAllMemberSpecific(userId);
 	}
 
 	@Override
 	public Category getById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return categoryRepository.findById(id);
 	}
 
 	@Override
-	public Category saveOrUpdate(Category member) {
-		// TODO Auto-generated method stub
-		return null;
+	public void saveOrUpdate(Category category) {
+		categoryRepository.save(category);
 	}
 
 	@Override
 	public void delete(long id) {
-		// TODO Auto-generated method stub
-		
+		categoryRepository.delete(categoryRepository.findById(id));
 	}
 
 }

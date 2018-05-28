@@ -3,15 +3,18 @@ package com.mwc.services;
 import java.util.List;
 
 import com.mwc.domain.Category;
+import com.mwc.domain.Cost;
 
 public interface CategoryService {
-	List<Category> getAllByUser(long userId);
-	List<Category> getUserSpecific(long userId);
-	List<Category> getMemberSpecific(long memberId);
 	
-	Category getById(long id);
+	public List<Category> getUserSpecific(long userId);
 	
-	Category saveOrUpdate(Category member);
+	public List<Category> getMemberSpecific(long userId);
+	
+	public Category getById(long id);
+	
+	public void saveOrUpdate(Category category);
 
-    void delete(long id);
+    public void delete(long id);
+
 }

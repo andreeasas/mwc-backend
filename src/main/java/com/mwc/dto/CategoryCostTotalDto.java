@@ -1,34 +1,37 @@
-package com.mwc.domain.views;
+package com.mwc.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.Immutable;
-
-@Entity
-@Immutable
-public class CostPerCategoryView {
-
-	@Id
+public class CategoryCostTotalDto {
+	
 	private String categName;
 	private double value;
+	private double percentFromTotal;
 	private String currency;
-
+	
+	public CategoryCostTotalDto() {
+	}
+	
 	public String getCategName() {
 		return categName;
 	}
-
+	
 	public void setCategName(String categName) {
 		this.categName = categName;
 	}
-
+	
 	public double getValue() {
 		return value;
 	}
-
+	
 	public void setValue(double value) {
 		this.value = value;
+	}
+	
+	public double getPercentFromTotal() {
+		return percentFromTotal;
+	}
+	
+	public void setPercentFromTotal(double percentFromTotal) {
+		this.percentFromTotal = percentFromTotal;
 	}
 
 	public String getCurrency() {
@@ -37,6 +40,6 @@ public class CostPerCategoryView {
 
 	public void setCurrency(String currency) {
 		this.currency = currency;
-	} 
-	
+	}
+
 }
