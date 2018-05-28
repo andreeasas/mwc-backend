@@ -2,13 +2,82 @@ $(document).ready(function() {
 	$('.panel-group').on('hidden.bs.collapse', toggleIcon);
 	$('.panel-group').on('shown.bs.collapse', toggleIcon);
 	
+	$( function() {
+		$( "#costDate" ).datepicker();
+	});
+	
+	$('#addCostForm')
+        .on('submit', function(e) {
+            // Save the form data via an Ajax request
+            e.preventDefault();
+
+            var $form = $(e.target),
+				cost_category_id  = $('#addCostForm').data("category_id"),
+				cost_date    = $form.find('[name="costDate"]').val(),
+				cost_amount    = $form.find('[name="amount"]').val(),
+				cost_description    = $form.find('[name="description"]').val(),
+				cost_currency    = $form.find('[name="currency"]').val();
+
+            // The url and method might be different in your application
+            $.ajax({
+                url: '/addCost/' + cost_category_id,
+                method: 'POST',
+				headers: { 
+					'Accept': 'application/json',
+					'Content-Type': 'application/json',
+					'X-CSRF-TOKEN': $('meta[name="_csrf"]').attr('content')	
+				},
+                data: JSON.stringify({
+                    cost_date: cost_date,
+					amount: cost_amount,
+					description: cost_description,
+					currency: cost_currency
+                })
+            ,success:function(response) {
+                // Hide the dialog
+                $form.parents('.bootbox').modal('hide');
+
+                // You can inform the user that the data is updated successfully
+                // by highlighting the row or showing a message box
+                bootbox.alert('The category name is added');
+            }});
+        });
+	
+	$('#addCategoryForm')
+        .on('submit', function(e) {
+            // Save the form data via an Ajax request
+            e.preventDefault();
+
+            var $form = $(e.target),
+				cat_name    = $form.find('[name="name"]').val();
+
+            // The url and method might be different in your application
+            $.ajax({
+                url: '/addCategory',
+                method: 'POST',
+				headers: { 
+					'Accept': 'application/json',
+					'Content-Type': 'application/json',
+					'X-CSRF-TOKEN': $('meta[name="_csrf"]').attr('content')	
+				},
+                data: JSON.stringify({
+                    name: cat_name,
+                })
+            ,success:function(response) {
+                // Hide the dialog
+                $form.parents('.bootbox').modal('hide');
+
+                // You can inform the user that the data is updated successfully
+                // by highlighting the row or showing a message box
+                bootbox.alert('The category name is added');
+            }});
+        });
+	
 	
     $('#editCategoryForm')
         .on('submit', function(e) {
             // Save the form data via an Ajax request
             e.preventDefault();
-			
-			alert("edit");
 
             var $form = $(e.target),
                 cat_id    = $form.find('[name="id"]').val(),
@@ -28,7 +97,6 @@ $(document).ready(function() {
                     name: cat_name,
                 })
             ,success:function(response) {
-                alert(response);
 
                 // Hide the dialog
                 $form.parents('.bootbox').modal('hide');
@@ -86,6 +154,29 @@ function toggleIcon(e) {
         .toggleClass('glyphicon-plus glyphicon-minus');
 }
 
+function addCategory() {
+			
+	// Show the dialog
+	bootbox
+		.dialog({
+			title: 'Add new expense category',
+			message: $('#addCategoryForm'),
+			show: false // We will show it manually later
+		})
+		.on('shown.bs.modal', function() {
+			$('#addCategoryForm')
+				.show()                             // Show the login form
+			 
+		})
+		.on('hide.bs.modal', function(e) {
+			// Bootbox will remove the modal (including the body which contains the login form)
+			// after hiding the modal
+			// Therefor, we need to backup the form
+			$('#addCategoryForm').hide().appendTo('body');
+		})
+		.modal('show');
+}
+
 function editCategory(id, name) {
 	//alert("edit");
 	
@@ -114,10 +205,42 @@ function editCategory(id, name) {
 		.modal('show');
 }
 
-function deleteCategory(id) {
-	alert("delete");
+function deleteCategory(elem, id) {
+
+	$.ajax({
+		url: '/deleteCategory/'+id,
+		method: 'DELETE',
+		headers: { 
+			'X-CSRF-TOKEN': $('meta[name="_csrf"]').attr('content')	
+		}
+	,success:function(response) {
+		elem.closest(".panel").remove();
+		
+		bootbox.alert('The category was deleted.');
+	}});
 }
 
 function addCost(id) {
-	alert("cost");
+	
+	$('#addCostForm').attr("data-category_id",id);
+	
+	// Show the dialog
+	bootbox
+		.dialog({
+			title: 'Add cost',
+			message: $('#addCostForm'),
+			show: false // We will show it manually later
+		})
+		.on('shown.bs.modal', function() {
+			$('#addCostForm')
+				.show()                             // Show the login form
+			 
+		})
+		.on('hide.bs.modal', function(e) {
+			// Bootbox will remove the modal (including the body which contains the login form)
+			// after hiding the modal
+			// Therefor, we need to backup the form
+			$('#addCostForm').hide().appendTo('body');
+		})
+		.modal('show');
 }

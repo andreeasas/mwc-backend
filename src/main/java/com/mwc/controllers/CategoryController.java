@@ -11,11 +11,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.mwc.commands.AjaxResponseBody;
+import com.mwc.commands.Views;
 import com.mwc.domain.Category;
 import com.mwc.domain.User;
 import com.mwc.services.CategoryService;
@@ -51,13 +56,60 @@ public class CategoryController {
         return "categories";
     }
 	
-	@RequestMapping(value = "/updateCategory", method = RequestMethod.POST)
 	@ResponseBody
-    public String  updateCategory(@RequestBody Object json, HttpServletRequest request, HttpServletResponse response) {
+	@JsonView(Views.Public.class)
+	@RequestMapping(value = "/addCategory", method = RequestMethod.POST)
+    public AjaxResponseBody  addCategory(@RequestBody Object json, HttpServletRequest request, HttpServletResponse response) {
+        
+		String name = (String)((LinkedHashMap)json).get("name");
+		
+		//use Repository to save category in DB
+		
+		
+		Category category = new Category();
+		category.setId(10);
+		category.setName(name);
+		
+		AjaxResponseBody ajaxResponse = new AjaxResponseBody();		
+		ajaxResponse.setCode("1");
+		ajaxResponse.setMessage("OK");
+		ajaxResponse.setResultData(category);
+		
+        return ajaxResponse;
+    }
+	
+	@ResponseBody
+	@JsonView(Views.Public.class)
+	@RequestMapping(value = "/updateCategory", method = RequestMethod.POST)
+    public AjaxResponseBody  updateCategory(@RequestBody Object json, HttpServletRequest request, HttpServletResponse response) {
         
 		String id = (String)((LinkedHashMap)json).get("id");
 		String name = (String)((LinkedHashMap)json).get("name");
 		
-        return name;
+		//use Repository to update category in DB
+		
+		AjaxResponseBody ajaxResponse = new AjaxResponseBody();
+		ajaxResponse.setCode("1");
+		ajaxResponse.setMessage("OK");
+		ajaxResponse.setResultData(name);
+		
+        return ajaxResponse;
+    }
+	
+	@ResponseBody
+	@JsonView(Views.Public.class)
+	@RequestMapping(value = "/deleteCategory/{id}", method = RequestMethod.DELETE)
+    public AjaxResponseBody  deleteCategory(@PathVariable long id, HttpServletRequest request, HttpServletResponse response) {
+        
+		String test = request.getParameter("id");
+		
+		//use Repository to delete category in DB
+		
+		AjaxResponseBody ajaxResponse = new AjaxResponseBody();
+		ajaxResponse.setCode("1");
+		ajaxResponse.setMessage("OK");
+		ajaxResponse.setResultData(null);
+		
+        return ajaxResponse;
     }
 }
