@@ -29,10 +29,20 @@
 	            <input type="text" class="form-control" id="endDate" name="endDate" value="" />
 	        </div>
 	    </div>
+	    
+	    <div class="form-group">
+	    	<div class="col-xs-offset-3 col-xs-5">
+			    <select class="selectpicker" style="margin:auto">
+				  <option>User+Member</option>
+				  <option>User</option>
+				  <option>Member</option>
+				</select>
+			</div>
+	  	</div>
 	
 	    <div class="form-group">
 	        <div class="col-xs-5 col-xs-offset-3">
-	            <button type="submit" class="btn btn-default">Show statistics</button>
+	            <button type="button" class="btn btn-default" onclick="showStatistics()">Show statistics</button>
 	        </div>
 	    </div>
 	</form> 

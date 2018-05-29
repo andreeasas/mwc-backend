@@ -58,11 +58,13 @@ public class StatisticsController {
 	
 	@ResponseBody
 	@JsonView(Views.Public.class)
-	@RequestMapping(value = "/showStatistics", method = RequestMethod.GET)
-    public AjaxResponseBody  showStatistics(HttpServletRequest request) {
+	@RequestMapping(value = "/showStatistics", method = RequestMethod.POST)
+    public AjaxResponseBody  showStatistics(@RequestBody Object json, HttpServletRequest request) {
         
 		@SuppressWarnings("rawtypes")
-//		String name = (String)((LinkedHashMap)json).get("name");
+		String startDate1 = (String)((LinkedHashMap)json).get("startDate");
+		String endDate1 = (String)((LinkedHashMap)json).get("endDate");
+		String target = (String)((LinkedHashMap)json).get("target");
 		
 		User user = (User)request.getSession().getAttribute("authUser");
 		
