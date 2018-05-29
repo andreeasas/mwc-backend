@@ -15,6 +15,9 @@ import com.mwc.domain.Member;
 @Repository
 @RepositoryRestResource(path="member", collectionResourceRel="member")
 public interface MemberRepository extends JpaRepository<Member, Long>, PagingAndSortingRepository<Member, Long>, CrudRepository<Member, Long> {
+	
 	@Query("from Member where dbUser.id = :userId")
-	List<Member> findByUserId(@Param("userId") long userId);
+	List<Member> findAllByUserId(@Param("userId") long userId);
+	
+	Member findById(@Param("id") long id);
 }

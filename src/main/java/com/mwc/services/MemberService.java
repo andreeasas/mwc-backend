@@ -4,7 +4,8 @@ import java.util.List;
 import com.mwc.domain.Member;
 
 public interface MemberService {
-	List<Member> getAllByUser(Long userId);
+	
+	List<Member> getAllByUserId(long userId);
 	
 	Member getById(Long id);
 	

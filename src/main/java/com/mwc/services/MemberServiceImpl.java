@@ -1,6 +1,5 @@
 package com.mwc.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,21 +10,13 @@ import com.mwc.repositories.MemberRepository;
 
 @Service
 public class MemberServiceImpl implements MemberService {
-	private MemberRepository memberRepository;
 	
 	@Autowired
-    public MemberServiceImpl(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
+	private MemberRepository memberRepository;
 
 	@Override
-	public List<Member> getAllByUser(Long userId) {
-		List<Member> members = new ArrayList<>();
-		List<Member> members2 = memberRepository.findByUserId(userId);
-		
-		members = members2;
-//        memberRepository.findByUserId(userId).forEach(members::add); //fun with Java 8
-        return members;
+	public List<Member> getAllByUserId(long userId) {
+        return memberRepository.findAllByUserId(userId);
 	}
 
 	@Override

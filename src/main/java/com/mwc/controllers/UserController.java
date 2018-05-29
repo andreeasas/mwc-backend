@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,10 +15,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.mwc.domain.Category;
 import com.mwc.domain.Member;
 import com.mwc.domain.User;
-import com.mwc.services.CategoryService;
 import com.mwc.services.MemberService;
 import com.mwc.services.SecurityService;
 import com.mwc.services.UserService;
@@ -80,7 +77,7 @@ public class UserController {
 
     	User user = userService.findByUsername(authentication.getName());
     	
-    	List<Member> members = memberService.getAllByUser(user.getId());
+    	List<Member> members = memberService.getAllByUserId(user.getId());
     	
     	request.getSession().setAttribute("members",members);
     	request.getSession().setAttribute("authUser",user);

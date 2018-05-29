@@ -7,15 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -23,16 +20,12 @@ import com.mwc.commands.AjaxResponseBody;
 import com.mwc.commands.Views;
 import com.mwc.domain.Category;
 import com.mwc.domain.User;
-import com.mwc.repositories.CategoryRepository;
 import com.mwc.services.CategoryService;
-import com.mwc.services.MemberService;
-import com.mwc.services.UserService;
 
 
 @Controller
 public class CategoryController {
-	@Autowired
-    private UserService userService;
+	
 	@Autowired
     private CategoryService categoryService;
 
@@ -47,13 +40,6 @@ public class CategoryController {
     	
     	List<Category> memberCategories = categoryService.getMemberSpecific(user.getId());
     	model.addAttribute("memberSpecificCategories", memberCategories);
-
-        return "categories";
-    }
-	
-	@RequestMapping(value = "/categories", method = RequestMethod.POST)
-    public String registrationPost(Model model) {
-        model.addAttribute("userForm", new User());
 
         return "categories";
     }

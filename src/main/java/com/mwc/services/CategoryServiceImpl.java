@@ -12,12 +12,8 @@ import com.mwc.repositories.MemberRepository;
 @Service
 public class CategoryServiceImpl implements CategoryService {
 	
-	private CategoryRepository categoryRepository;
-	
 	@Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
+	private CategoryRepository categoryRepository;
 
 	@Override
 	public List<Category> getUserSpecific(long userId) {

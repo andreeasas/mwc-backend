@@ -19,6 +19,7 @@ import com.mwc.repositories.UserRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService{
+	
     @Autowired
     private UserRepository userRepository;
 

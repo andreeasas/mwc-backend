@@ -1,7 +1,6 @@
 package com.mwc.repositories;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -10,10 +9,9 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
-import org.springframework.test.annotation.Commit;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.mwc.domain.Cost;
+import com.mwc.domain.Member;
 import com.mwc.domain.User;
 
 
@@ -25,11 +23,23 @@ public interface CostRepository extends PagingAndSortingRepository<Cost, Long>, 
 			" where cost.dbUser = :user " +
 			" and cost.costDate >= :startDate and cost.costDate <= :endDate")
     public List<Cost> getCostsByUserInPeriod(@Param("user") User user, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
-
+	
+	@Query(" from Cost as cost" + 
+			" where cost.member = :member " +
+			" and cost.costDate >= :startDate and cost.costDate <= :endDate")
+    public List<Cost> getCostsByMemberInPeriod(@Param("member") Member member, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+	
+	@Query(" select cost " +
+			" from Cost as cost" + 
+			" left join cost.member as dbMember " +
+			" where dbMember.id = :memberId " +
+			" and cost.costDate >= :startDate and cost.costDate <= :endDate")
+    public List<Cost> getCostsByMemberInPeriod(@Param("memberId") long memberId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+	
 	@Query(" from Cost as cost" + 
 			" where cost.dbUser.id = :userId " +
 			" and cost.costDate >= :startDate and cost.costDate <= :endDate")
-    public List<Cost> getCostsByUserIdInPeriod(@Param("userId") long userId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+    public List<Cost> getCostsByUserInPeriod(@Param("userId") long userId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
 	@Query(" select categ.name as name, sum(cost.value) as val" +
 			" from Cost as cost" + 

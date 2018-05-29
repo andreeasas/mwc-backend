@@ -1,42 +1,48 @@
 package com.mwc.services;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-import org.hibernate.Query;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.mwc.domain.Category;
 import com.mwc.domain.Cost;
+import com.mwc.domain.Member;
 import com.mwc.domain.User;
 import com.mwc.dto.CategoryCostTotalDto;
+import com.mwc.repositories.CategoryRepository;
 import com.mwc.repositories.CostRepository;
+import com.mwc.repositories.MonetaryUnitRepository;
 
 @Service
 public class CostServiceImpl implements CostService {
 	
+	@Autowired
 	private CostRepository costRepository;
 	
 	@Autowired
-	public CostServiceImpl(CostRepository costRepository) {
-		this.costRepository = costRepository;
-	}
+	private CategoryRepository categoryRepository;
+	
+	@Autowired
+	private MonetaryUnitRepository monetaryUnitRepository;
 
 	@Override
-	public void save(Cost cost) {
+	public void saveOrUpdate(Cost cost) {
+		costRepository.save(cost);
+	}
+	
+	@Override
+	public void saveOrUpdate(Cost cost, long categId, String currencyCode) {
+		Category costCateg = categoryRepository.findById(categId); // how connect to category ??
+		cost.setCategory(costCateg);
+		cost.setDbUser(costCateg.getDbUser());
+		cost.setMember(costCateg.getMember());
+		
+		cost.setUm(monetaryUnitRepository.findByCode(currencyCode));
+		
 		costRepository.save(cost);
 	}
 
@@ -44,12 +50,23 @@ public class CostServiceImpl implements CostService {
 	public void delete(Cost cost) {
 		costRepository.delete(cost);
 	}
+	
 
 	@Override
-	public void update(Cost cost) {
-		costRepository.delete(cost);
+	public List<Cost> findCostsByUserInPeriod(User user, Date startDate, Date endDate) {
+		return costRepository.getCostsByUserInPeriod(user, startDate, endDate);
 	}
 
+	@Override
+	public List<Cost> findCostsByMemberInPeriod(Member member, Date startDate, Date endDate) {
+		return costRepository.getCostsByMemberInPeriod(member, startDate, endDate);
+	}
+
+	@Override
+	public List<Cost> findCostsByMemberInPeriod(long memberId, Date startDate, Date endDate) {
+		return costRepository.getCostsByMemberInPeriod(memberId, startDate, endDate);
+	}
+	
 	@Override
 	public List<CategoryCostTotalDto> findByUsernameInPeriod(User user, Date startDate, Date endDate) {
 		List<Object[]> totalCostsByUserInPeriod = costRepository.getTotalCostsByUserInPeriod(user, startDate, endDate);
