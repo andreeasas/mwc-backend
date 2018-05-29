@@ -18,7 +18,6 @@ $(document).ready(function() {
 				cost_description    = $form.find('[name="description"]').val(),
 				cost_currency    = $form.find('[name="currency"]').val();
 
-            // The url and method might be different in your application
             $.ajax({
                 url: '/addCost/' + cost_category_id,
                 method: 'POST',

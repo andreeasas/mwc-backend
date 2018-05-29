@@ -53,7 +53,6 @@ public class CategoryController {
 		String name = (String)((LinkedHashMap)json).get("name");
 		User user = (User)request.getSession().getAttribute("authUser");
 		
-		//use Repository to save category in DB
 		Category category = new Category();
 		category.setName(name);
 		category.setDbUser(user);

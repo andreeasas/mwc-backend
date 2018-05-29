@@ -68,7 +68,7 @@ public class CostServiceImpl implements CostService {
 	}
 	
 	@Override
-	public List<CategoryCostTotalDto> findByUsernameInPeriod(User user, Date startDate, Date endDate) {
+	public List<CategoryCostTotalDto> findTotalExpenseByUserInPeriod(User user, Date startDate, Date endDate) {
 		List<Object[]> totalCostsByUserInPeriod = costRepository.getTotalCostsByUserInPeriod(user, startDate, endDate);
 		
 		List<CategoryCostTotalDto> costsDto = new ArrayList<CategoryCostTotalDto>();
@@ -102,7 +102,7 @@ public class CostServiceImpl implements CostService {
 	}
 
 	@Override
-	public List<CategoryCostTotalDto> findWithCurrencyByUsernameInPeriod(User user, Date startDate, Date endDate) {
+	public List<CategoryCostTotalDto> findTotalExpenseWithCurrencyByUserInPeriod(User user, Date startDate, Date endDate) {
 List<Object[]> totalCostsByUserInPeriod = costRepository.getTotalCostsByUserInPeriod(user, startDate, endDate);
 		
 		List<CategoryCostTotalDto> costsDto = new ArrayList<CategoryCostTotalDto>();

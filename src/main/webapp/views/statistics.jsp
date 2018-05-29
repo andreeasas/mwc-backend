@@ -3,10 +3,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<%@ include file="parts/meta.jsp" %> 
-	<title>Show statistics</title>
-	<%@ include file="parts/header.jsp" %> 
+    <%@ include file="parts/meta.jsp" %> 
+    <meta name="_csrf" content="${_csrf.token}"/>
+	<meta name="_csrf_header" content="${_csrf.headerName}"/>
+    <title>Show statistics</title>
+    <%@ include file="parts/header.jsp" %> 
 </head>
 
 <body>
@@ -16,14 +17,14 @@
 <div class="container">
 	<form id="showCostForm" method="post" class="form-horizontal">
 	    <div class="form-group">
-	        <label class="col-xs-3 control-label">startDate</label>
+	        <label class="col-xs-3 control-label">Start Date</label>
 	        <div class="col-xs-5">
 	            <input type="text" class="form-control" id="startDate" name="startDate" value="" />
 	        </div>
 	    </div>
 	    
 	    <div class="form-group">
-	        <label class="col-xs-3 control-label">endDate</label>
+	        <label class="col-xs-3 control-label">End Date</label>
 	        <div class="col-xs-5">
 	            <input type="text" class="form-control" id="endDate" name="endDate" value="" />
 	        </div>
@@ -35,7 +36,9 @@
 	        </div>
 	    </div>
 	</form> 
-	
+
+<hr class="hr-separator-thin">
+
 <table class="table table-borderless table-dark">
   <thead>
     <tr>
@@ -46,30 +49,22 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>food</td>
-      <td>55</td>
-      <td>55%</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>transport</td>
-      <td>20</td>
-      <td>20%</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>bills</td>
-      <td>25</td>
-      <td>25%</td>
-    </tr>
-  </tbody>
+  	<% int i = 1; %> 
+  	<c:forEach var="expense" items="${totalExpenses}">
+        <tr>
+          <td><%= i %> <% i++; %></td>
+          <td>${expense.categName}</td>
+          <td>${expense.value}</td>
+          <td>${expense.percentFromTotal}</td>
+        </tr>
+   	</c:forEach>
+   </tbody>
 </table>
 	
 </div>
 
-<%@ include file="parts/footer.jsp" %> 
-
+<%@ include file="parts/footer.jsp" %>
+<script src="//oss.maxcdn.com/bootbox/4.2.0/bootbox.min.js"></script>
+<script src="${contextPath}/resources/js/statistics.js"></script>
 </body>
 </html>
