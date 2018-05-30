@@ -84,8 +84,6 @@ public class CostServiceImpl implements CostService {
 			costsDto.add(costDto);
 		}
 		
-		System.out.println("TOTAL: " + total.doubleValue());
-		
 		final Double totalSum = total;
 		
 		final DecimalFormat decimalFormat = new DecimalFormat("#.00");
@@ -94,16 +92,13 @@ public class CostServiceImpl implements CostService {
 			costDto.setPercentFromTotal(Double.parseDouble(decimalFormat.format(percentFromTotal)));
 		});
 		
-		costsDto.forEach(costDto -> {
-			System.out.println(costDto.getCategName() + " " + costDto.getValue()+ " " + costDto.getPercentFromTotal());
-		}); //
-		
 		return costsDto;
 	}
 
 	@Override
 	public List<CategoryCostTotalDto> findTotalExpenseWithCurrencyByUserInPeriod(User user, Date startDate, Date endDate) {
-List<Object[]> totalCostsByUserInPeriod = costRepository.getTotalCostsByUserInPeriod(user, startDate, endDate);
+		
+		List<Object[]> totalCostsByUserInPeriod = costRepository.getTotalCostsByUserInPeriod(user, startDate, endDate);
 		
 		List<CategoryCostTotalDto> costsDto = new ArrayList<CategoryCostTotalDto>();
 		Double total = Double.valueOf(0);
@@ -120,9 +115,7 @@ List<Object[]> totalCostsByUserInPeriod = costRepository.getTotalCostsByUserInPe
 		}
 		
 		System.out.println("TOTAL: " + total.doubleValue());
-		
-		
-		
+
 		return null;
 	}
 

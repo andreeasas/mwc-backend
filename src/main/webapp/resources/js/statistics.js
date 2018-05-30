@@ -19,17 +19,17 @@ function showStatistics() {
 	
 	$.ajax({
         url: '/showStatistics',
-        method: 'GET',
+        method: 'POST',
 		headers: { 
 			'Accept': 'application/json',
 			'Content-Type': 'application/json',
 			'X-CSRF-TOKEN': $('meta[name="_csrf"]').attr('content')	
 		},
-		data: {
-			start_date: startDate,
+        data: JSON.stringify({
+            start_date: startDate,
 			end_date: endDate,
 			target: 0
-		}
+        })
 		,success:function(response) {
 			$("#statisticsDataContainer").html( response );
 			$(".loader").addClass("hidden");

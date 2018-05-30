@@ -48,7 +48,7 @@
 	    </div>
 	</form> 
 
-<hr class="hr-separator-thin">
+<hr class="hr-separator">
 
 <div id="statisticsDataContainer">
 </div>

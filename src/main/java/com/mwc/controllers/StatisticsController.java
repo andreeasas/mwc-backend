@@ -1,11 +1,15 @@
 package com.mwc.controllers;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,64 +45,33 @@ public class StatisticsController {
 		return "statistics";
 	}
 	
-	@RequestMapping(value = "/showExpenses", method = RequestMethod.GET)
-    public String  showExpenses(Model model, HttpServletRequest request) {
-        
-		User user = (User)request.getSession().getAttribute("authUser");
-		
-    	Date startDate = new GregorianCalendar(2018, Calendar.JANUARY, 18).getTime();
-		Date endDate = new GregorianCalendar(2018, Calendar.JUNE, 20).getTime();
-		
-		List<CategoryCostTotalDto> totalExpenses = costService.findTotalExpenseByUserInPeriod(user, startDate, endDate);
-		
-		model.addAttribute("totalExpenses", totalExpenses);
-		
-        return "statistics";
-    }
-	
 	@ResponseBody
 	@JsonView(Views.Public.class)
-	@RequestMapping(value = "/showStatisticsAjax", method = RequestMethod.POST)
-    public AjaxResponseBody  showStatisticsAjax(@RequestBody Object json, HttpServletRequest request) {
+	@RequestMapping(value = "/showStatistics", method = RequestMethod.POST)
+    public ModelAndView  showStatistics(Model model, HttpServletRequest request, @RequestBody Object json) {
         
 		@SuppressWarnings("rawtypes")
-		String startDate1 = (String)((LinkedHashMap)json).get("startDate");
-		String endDate1 = (String)((LinkedHashMap)json).get("endDate");
-		String target = (String)((LinkedHashMap)json).get("target");
+		String start = (String)((LinkedHashMap)json).get("start_date");
+		@SuppressWarnings("rawtypes")
+		String end = (String)((LinkedHashMap)json).get("end_date");
+		@SuppressWarnings("rawtypes")
+		Integer target = (Integer)((LinkedHashMap)json).get("target");
 		
 		User user = (User)request.getSession().getAttribute("authUser");
 		
-    	Date startDate = new GregorianCalendar(2018, Calendar.JANUARY, 18).getTime();
-		Date endDate = new GregorianCalendar(2018, Calendar.FEBRUARY, 20).getTime();
+		DateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+		Date startDate = null;
+		Date endDate = null;
+		try {
+			startDate = format.parse(start);
+			endDate = format.parse(end);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		
 		List<CategoryCostTotalDto> totalExpenses = costService.findTotalExpenseByUserInPeriod(user, startDate, endDate);
 		
-		AjaxResponseBody ajaxResponse = new AjaxResponseBody();		
-		ajaxResponse.setCode("1");
-		ajaxResponse.setMessage("OK");
-		ajaxResponse.setResultData(totalExpenses);
-		
-        return ajaxResponse;
-    }
-	
-	@RequestMapping(value = "/showStatistics", method = RequestMethod.GET)
-    public ModelAndView  showStatistics(Model model, HttpServletRequest request) {
-        
-		@SuppressWarnings("rawtypes")
-//		String startDate1 = (String)((LinkedHashMap)json).get("startDate");
-//		String endDate1 = (String)((LinkedHashMap)json).get("endDate");
-//		String target = (String)((LinkedHashMap)json).get("target");
-		
-		User user = (User)request.getSession().getAttribute("authUser");
-		
-    	Date startDate = new GregorianCalendar(2018, Calendar.JANUARY, 18).getTime();
-		Date endDate = new GregorianCalendar(2018, Calendar.FEBRUARY, 20).getTime();
-		
-		List<CategoryCostTotalDto> totalExpenses = costService.findTotalExpenseByUserInPeriod(user, startDate, endDate);
-		
-		
-		model.addAttribute( "startDate", startDate );
-		model.addAttribute( "endDate", endDate );
+		model.addAttribute( "totalExpenses", totalExpenses);
         return new ModelAndView("parts/statisticsTable");
     }
 	
