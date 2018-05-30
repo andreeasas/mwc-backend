@@ -21,3 +21,9 @@
    	</c:forEach>
    </tbody>
 </table>
+
+<div class="form-group">
+	<div class="col-xs-offset-3 col-xs-5">
+		<h4>Total: ${total}</h4>
+	</div>
+</div>

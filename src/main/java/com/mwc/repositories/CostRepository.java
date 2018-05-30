@@ -49,6 +49,25 @@ public interface CostRepository extends PagingAndSortingRepository<Cost, Long>, 
 			" group by (categ.name)")
 	public List<Object[]> getTotalCostsByUserInPeriod(@Param("user") User user, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 	
+	@Query(" select categ.name as name, sum(cost.value) as val" +
+			" from Cost as cost" + 
+			" left join cost.category as categ" +
+			" left join cost.member as dbMember" +
+			" where " +
+			" (cost.dbUser = :user " +
+			" or dbMember.dbUser = :user) " +
+			" and (cost.costDate >= :startDate and cost.costDate <= :endDate)" +
+			" group by (categ.name)")
+	public List<Object[]> getTotalCostsByUserAndMembersInPeriod(@Param("user") User user, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+	
+	@Query(" select categ.name as name, sum(cost.value) as val" +
+			" from Cost as cost" + 
+			" left join cost.category as categ" +
+			" where cost.member = :member " +
+			" and cost.costDate >= :startDate and cost.costDate <= :endDate" +
+			" group by (categ.name)")
+	public List<Object[]> getTotalCostsByMemberInPeriod(@Param("member") Member member, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+	
 	@Query(" select categ.name as name, sum(cost.value) as val, um.code as currency" +
 			" from Cost as cost" + 
 			" inner join cost.category as categ" +
@@ -57,5 +76,5 @@ public interface CostRepository extends PagingAndSortingRepository<Cost, Long>, 
 			" and cost.costDate >= :startDate and cost.costDate <= :endDate" +
 			" group by (categ.name)")
 	public List<Object[]> getTotalCostsAndCurrencyByUserInPeriod(@Param("user") User user, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
-	
+
 }

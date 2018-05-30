@@ -1,7 +1,7 @@
 package com.mwc.controllers;
 
 
-import java.util.LinkedHashMap;
+
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.mwc.commands.AjaxResponseBody;
 import com.mwc.commands.Views;
 import com.mwc.domain.Category;
@@ -91,7 +90,7 @@ public class UserController {
     	List<Member> members = memberService.getAllByUserId(user.getId());
     	
     	request.getSession().setAttribute("members",members);
-    	request.getSession().setAttribute("selectedMemberId",members.get(0).getId());
+    	request.getSession().setAttribute("selectedMember",members.get(0));
     	
     	request.getSession().setAttribute("authUser",user);
     	

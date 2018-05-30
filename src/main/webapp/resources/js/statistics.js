@@ -13,7 +13,8 @@ $(document).ready(function() {
 function showStatistics() {
 	
 	var startDate = $("#startDate").val(); 
-	var endDate = $("#endDate").val(); 
+	var endDate = $("#endDate").val();
+	var statisticsType = $('#statisticsType').val();
 	
 	$(".loader").removeClass("hidden");
 	
@@ -28,7 +29,7 @@ function showStatistics() {
         data: JSON.stringify({
             start_date: startDate,
 			end_date: endDate,
-			target: 0
+			statistics_type: statisticsType
         })
 		,success:function(response) {
 			$("#statisticsDataContainer").html( response );

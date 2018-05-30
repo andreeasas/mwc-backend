@@ -4,15 +4,12 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,12 +21,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.mwc.commands.AjaxResponseBody;
 import com.mwc.commands.Views;
-import com.mwc.domain.Category;
-import com.mwc.domain.Cost;
+import com.mwc.domain.Member;
 import com.mwc.domain.User;
 import com.mwc.dto.CategoryCostTotalDto;
+import com.mwc.dto.TotalStatisticsDto;
 import com.mwc.services.CostService;
 
 @Controller
@@ -55,7 +51,7 @@ public class StatisticsController {
 		@SuppressWarnings("rawtypes")
 		String end = (String)((LinkedHashMap)json).get("end_date");
 		@SuppressWarnings("rawtypes")
-		Integer target = (Integer)((LinkedHashMap)json).get("target");
+		String statisticsType = (String)((LinkedHashMap)json).get("statistics_type");
 		
 		User user = (User)request.getSession().getAttribute("authUser");
 		
@@ -69,9 +65,22 @@ public class StatisticsController {
 			e.printStackTrace();
 		}
 		
-		List<CategoryCostTotalDto> totalExpenses = costService.findTotalExpenseByUserInPeriod(user, startDate, endDate);
+		TotalStatisticsDto totalStatisticsDto = null;
 		
-		model.addAttribute( "totalExpenses", totalExpenses);
+		switch (statisticsType) {
+		case "User":
+			totalStatisticsDto = costService.findTotalExpenseByUserInPeriod(user, startDate, endDate);
+			break;
+		case "User and Members":
+			totalStatisticsDto = costService.getTotalCostsByUserAndMembersInPeriod(user, startDate, endDate);
+			break;
+		case "Member":
+			Member member = (Member) request.getSession().getAttribute("selectedMember");
+			totalStatisticsDto = costService.getTotalCostsByMemberInPeriod(member, startDate, endDate);
+		}
+		
+		model.addAttribute( "totalExpenses", totalStatisticsDto.getCategoryCostSums());
+		model.addAttribute("total", totalStatisticsDto.getTotal());
         return new ModelAndView("parts/statisticsTable");
     }
 	

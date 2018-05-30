@@ -32,8 +32,8 @@
 	    
 	    <div class="form-group">
 	    	<div class="col-xs-offset-3 col-xs-5">
-			    <select class="selectpicker" style="margin:auto">
-				  <option>User+Member</option>
+			    <select class="selectpicker" id="statisticsType" style="margin:auto">
+				  <option>User and Members</option>
 				  <option>User</option>
 				  <option>Member</option>
 				</select>
