@@ -81,7 +81,102 @@ public class CostServiceImpl implements CostService {
 		
 		return createTotalStatisticsDto(totalCostsByUser);
 	}
+	
+	@Override
+	public TotalStatisticsDto getTotalCostsByUserAndMembersInPeriod(User user, Date startDate, Date endDate) {
+		List<Object[]> totalCostsByUserAndMembers = costRepository.getTotalCostsByUserAndMembersInPeriod(user, startDate, endDate);
+		
+		return createTotalStatisticsDto(totalCostsByUserAndMembers);
+	}
+	
+	@Override
+	public TotalStatisticsDto getTotalCostsByMemberInPeriod(Member member, Date startDate, Date endDate) {
+		List<Object[]> totalCostsByMember = costRepository.getTotalCostsByMemberInPeriod(member, startDate, endDate);
+		
+		return createTotalStatisticsDto(totalCostsByMember);
+	}
 
+	@Override
+	public List<TotalStatisticsDto> findTotalExpensesWithCurrencyInPeriod(User user, Member member, Date startDate, Date endDate, String statisticsType) {
+		
+		String queryText = //
+		" select categ.name as name, sum(cost.value) as val, um.code as currency" +
+		" from Cost as cost" + 
+		" inner join cost.category as categ" +
+		" inner join cost.um as um" +
+		" where "+
+		addWhereClause(statisticsType) +
+		" and cost.costDate >= :startDate and cost.costDate <= :endDate" +
+		" group by (categ.name, um.code)";
+		
+		Query query = em.createQuery(queryText);
+		addParamAccordingStatistics(query, statisticsType, user, member, startDate, endDate);
+		
+		@SuppressWarnings("unchecked")
+		List<Object[]> totalCostsInPeriod = query.getResultList();
+		
+		List<CategoryCostTotalDto> categoryCostDtos = new ArrayList<>();
+		
+		for (Object[] array : totalCostsInPeriod) {
+			CategoryCostTotalDto costDto = new CategoryCostTotalDto();
+			costDto.setCategName((String) array[0]);
+			costDto.setValue((Double) array[1]);
+			costDto.setCurrency((String) array[2]);
+			categoryCostDtos.add(costDto);
+		}
+		
+		categoryCostDtos.stream().filter(costDto -> costDto.getCurrency().equals("EUR")).collect(Collectors.toList());
+		
+		return null;
+	}
+
+	@Override
+	public TotalStatisticsDto findTotalExpensesInPeriod(User user, Member member, Date startDate, Date endDate,
+			String statisticsType) {
+
+		String queryText = //
+		" select categ.name as name, sum(cost.value) as val" +
+		" from Cost as cost" + 
+		" left join cost.category as categ" +
+		" left join cost.member as dbMember" +
+		" where "+
+		addWhereClause(statisticsType) +
+		" and cost.costDate >= :startDate and cost.costDate <= :endDate" +
+		" group by (categ.name)";
+		
+		Query query = em.createQuery(queryText);
+		addParamAccordingStatistics(query, statisticsType, user, member, startDate, endDate);
+		
+		@SuppressWarnings("unchecked")
+		List<Object[]> totalCostsInPeriod = query.getResultList();
+		
+		return createTotalStatisticsDto(totalCostsInPeriod);
+	}
+
+	private String addWhereClause(String statisticsType) {
+		switch (statisticsType) {
+		case "User":
+			return " cost.dbUser = :user ";
+		case "User and Members":
+			return " (cost.dbUser = :user " + 
+					" or dbMember.dbUser = :user) ";
+		case "Member":
+			return " cost.member = :member ";
+		}
+		return "";
+	}
+	
+	private void addParamAccordingStatistics(Query query, String statisticsType, User user, Member member, Date startDate, Date endDate) {
+		if (statisticsType.equals("User") || statisticsType.equals("User and Members")) {
+			query.setParameter("user", user);
+		}
+		if (statisticsType.equals("Member")) {
+			query.setParameter("member", member);
+		}
+		query.setParameter("startDate", startDate);
+		query.setParameter("endDate", endDate);
+	}
+	
 	private TotalStatisticsDto createTotalStatisticsDto(List<Object[]> totalCostsByUserInPeriod) {
 		List<CategoryCostTotalDto> costsDto = new ArrayList<CategoryCostTotalDto>();
 		Double total = Double.valueOf(0);
@@ -106,66 +201,6 @@ public class CostServiceImpl implements CostService {
 		
 		return new TotalStatisticsDto(costsDto, total.doubleValue());
 	}
-	
-	@Override
-	public TotalStatisticsDto getTotalCostsByUserAndMembersInPeriod(User user, Date startDate, Date endDate) {
-		List<Object[]> totalCostsByUserAndMembers = costRepository.getTotalCostsByUserAndMembersInPeriod(user, startDate, endDate);
-		
-		return createTotalStatisticsDto(totalCostsByUserAndMembers);
-	}
-	
-	@Override
-	public TotalStatisticsDto getTotalCostsByMemberInPeriod(Member member, Date startDate, Date endDate) {
-		List<Object[]> totalCostsByMember = costRepository.getTotalCostsByMemberInPeriod(member, startDate, endDate);
-		
-		return createTotalStatisticsDto(totalCostsByMember);
-	}
-
-	@Override
-	public List<TotalStatisticsDto> findTotalExpenseWithCurrencyByUserInPeriod(User user, Date startDate, Date endDate) {
-		
-//		List<Object[]> totalCostsByUserInPeriod = costRepository.getTotalCostsByUserInPeriod(user, startDate, endDate);
-//		
-//		List<CategoryCostTotalDto> costDtos = new ArrayList<CategoryCostTotalDto>();
-//		
-//		for (Object[] array : totalCostsByUserInPeriod) {
-//			CategoryCostTotalDto costDto = new CategoryCostTotalDto();
-//			costDto.setCategName((String) array[0]);
-//			costDto.setValue((Double) array[1]);
-//			costDto.setCurrency((String) array[2]);
-//			costDtos.add(costDto);
-//		}
-//		
-//		costDtos.stream().filter(costDto -> costDto.getCurrency().equals("EUR")).collect(Collectors.toList());
-		
-		String queryText = " select categ.name as name, sum(cost.value) as val, um.code as currency" +
-		" from Cost as cost" + 
-		" inner join cost.category as categ" +
-		" inner join cost.um as um" +
-		" where cost.dbUser = :user " +
-		" and cost.costDate >= :startDate and cost.costDate <= :endDate" +
-		" group by (categ.name)";
-		
-		Query query = em.createQuery(queryText);
-		query.setParameter("user", user);
-		query.setParameter("startDate", startDate);
-		query.setParameter("endDate", endDate);
-		
-		List<Object[]> totalCostsByUserInPeriod = query.getResultList();
-
-		return null;
-	}
-	
-//	" select categ.name as name, sum(cost.value) as val" +
-//	" from Cost as cost" + 
-//	" left join cost.category as categ" +
-//	" left join cost.member as dbMember" +
-//	" where "+
-//	" (cost.dbUser = :user " +
-//	" or cost.member = :member " +
-//	" or dbMember.dbUser = :user) "
-//	" and cost.costDate >= :startDate and cost.costDate <= :endDate" +
-//	" group by (categ.name)"
 
 }
 

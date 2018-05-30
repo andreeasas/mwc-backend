@@ -28,6 +28,8 @@ public interface CostService {
     
     public TotalStatisticsDto getTotalCostsByMemberInPeriod(Member member, Date startDate, Date endDate);
     
-    public List<TotalStatisticsDto> findTotalExpenseWithCurrencyByUserInPeriod(User user, Date startDate, Date endDate);
+    public TotalStatisticsDto findTotalExpensesInPeriod(User user, Member member, Date startDate, Date endDate, String statisticsType); 
+    
+    public List<TotalStatisticsDto> findTotalExpensesWithCurrencyInPeriod(User user, Member member, Date startDate, Date endDate, String statisticsType);
     
 }

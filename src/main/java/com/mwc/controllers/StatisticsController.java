@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,6 +53,7 @@ public class StatisticsController {
 		String statisticsType = (String)((LinkedHashMap)json).get("statistics_type");
 		
 		User user = (User)request.getSession().getAttribute("authUser");
+		Member member = (Member) request.getSession().getAttribute("selectedMember");
 		
 		DateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
 		Date startDate = null;
@@ -65,19 +65,7 @@ public class StatisticsController {
 			e.printStackTrace();
 		}
 		
-		TotalStatisticsDto totalStatisticsDto = null;
-		
-		switch (statisticsType) {
-		case "User":
-			totalStatisticsDto = costService.findTotalExpenseByUserInPeriod(user, startDate, endDate);
-			break;
-		case "User and Members":
-			totalStatisticsDto = costService.getTotalCostsByUserAndMembersInPeriod(user, startDate, endDate);
-			break;
-		case "Member":
-			Member member = (Member) request.getSession().getAttribute("selectedMember");
-			totalStatisticsDto = costService.getTotalCostsByMemberInPeriod(member, startDate, endDate);
-		}
+		TotalStatisticsDto totalStatisticsDto = costService.findTotalExpensesInPeriod(user, member, startDate, endDate, statisticsType);
 		
 		model.addAttribute( "totalExpenses", totalStatisticsDto.getCategoryCostSums());
 		model.addAttribute("total", totalStatisticsDto.getTotal());
