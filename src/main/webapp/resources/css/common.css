@@ -4,6 +4,10 @@ body {
     background-color: #eee;
 }
 
+.hidden {
+	display:none;
+}
+
 .form-signin {
     max-width: 330px;
     padding: 15px;
@@ -108,6 +112,23 @@ hr.delimitator {
     margin-top: 0px;
 }
 
+/* *** spinner  ***  */
+.loader {
+    border: 5px solid #f3f3f3;
+    -webkit-animation: spin 1s linear infinite;
+    animation: spin 1s linear infinite;
+    border-top: 5px solid #555;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    margin-top: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 /* *********************** */
 
 .fieldset-custom {
@@ -115,3 +136,6 @@ hr.delimitator {
 	padding: 25px 15px;
 }
     
+.dropdown-selected {
+	font-weight: bold;
+}

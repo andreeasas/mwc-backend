@@ -43,34 +43,16 @@
 	    <div class="form-group">
 	        <div class="col-xs-5 col-xs-offset-3">
 	            <button type="button" class="btn btn-default" onclick="showStatistics()">Show statistics</button>
+	            <div class="loader hidden"></div>
 	        </div>
 	    </div>
 	</form> 
 
 <hr class="hr-separator-thin">
 
-<table class="table table-borderless table-dark">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Category Name</th>
-      <th scope="col">Value</th>
-      <th scope="col">Percent from Total</th>
-    </tr>
-  </thead>
-  <tbody>
-  	<% int i = 1; %> 
-  	<c:forEach var="expense" items="${totalExpenses}">
-        <tr>
-          <td><%= i %> <% i++; %></td>
-          <td>${expense.categName}</td>
-          <td>${expense.value}</td>
-          <td>${expense.percentFromTotal}</td>
-        </tr>
-   	</c:forEach>
-   </tbody>
-</table>
-	
+<div id="statisticsDataContainer">
+</div>
+
 </div>
 
 <%@ include file="parts/footer.jsp" %>

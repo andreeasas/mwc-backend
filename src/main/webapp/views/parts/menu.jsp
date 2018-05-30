@@ -1,3 +1,5 @@
+<%@ page import="com.mwc.domain.Member" %>
+
 <header>
   <nav class="navbar navbar-inverse">
   <div class="container-fluid">
@@ -13,10 +15,14 @@
       <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Select member <span class="caret"></span></a>
         <ul class="dropdown-menu">
         <% if (session.getAttribute("members") == null) { %>
-        	<li><a href="#">Nothing to show</a></li>
+        	<li>Nothing to show</li>
 		<% } else {%>
 		    <c:forEach items='<%= session.getAttribute("members") %>' var="item">
-	    		<li><a href="#">${item.name}</a></li>
+		    	<c:if test='true'> 
+		    	
+				  <li><a href="switchMember?id=${item.id}" data-member-id="${item.id}" style="${item.id == sessionScope.selectedMemberId ? 'font-weight:bold' : ''}">${item.name}</a></li>
+				</c:if>
+				
 			</c:forEach>
 		<% } %>
         

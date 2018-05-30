@@ -1,9 +1,11 @@
 package com.mwc.controllers;
 
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -12,9 +14,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.mwc.commands.AjaxResponseBody;
+import com.mwc.commands.Views;
+import com.mwc.domain.Category;
 import com.mwc.domain.Member;
 import com.mwc.domain.User;
 import com.mwc.services.MemberService;
@@ -70,7 +81,7 @@ public class UserController {
         return "login";
     }
 
-    @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String welcome(Model model, HttpServletRequest request) {
 //    	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -80,8 +91,19 @@ public class UserController {
     	List<Member> members = memberService.getAllByUserId(user.getId());
     	
     	request.getSession().setAttribute("members",members);
+    	request.getSession().setAttribute("selectedMemberId",members.get(0).getId());
+    	
     	request.getSession().setAttribute("authUser",user);
     	
         return "welcome";
+    }
+    
+	@RequestMapping(value = "/switchMember", method = RequestMethod.GET)
+    public ModelAndView deleteCategory(@RequestParam(value="id", required=false) long id,
+    		HttpServletRequest request, HttpServletResponse response) {
+        
+		request.getSession().setAttribute("selectedMemberId", id);
+		
+        return new ModelAndView("welcome");
     }
 }

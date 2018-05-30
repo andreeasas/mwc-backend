@@ -58,8 +58,8 @@ public class StatisticsController {
 	
 	@ResponseBody
 	@JsonView(Views.Public.class)
-	@RequestMapping(value = "/showStatistics", method = RequestMethod.POST)
-    public AjaxResponseBody  showStatistics(@RequestBody Object json, HttpServletRequest request) {
+	@RequestMapping(value = "/showStatisticsAjax", method = RequestMethod.POST)
+    public AjaxResponseBody  showStatisticsAjax(@RequestBody Object json, HttpServletRequest request) {
         
 		@SuppressWarnings("rawtypes")
 		String startDate1 = (String)((LinkedHashMap)json).get("startDate");
@@ -79,6 +79,27 @@ public class StatisticsController {
 		ajaxResponse.setResultData(totalExpenses);
 		
         return ajaxResponse;
+    }
+	
+	@RequestMapping(value = "/showStatistics", method = RequestMethod.GET)
+    public ModelAndView  showStatistics(Model model, HttpServletRequest request) {
+        
+		@SuppressWarnings("rawtypes")
+//		String startDate1 = (String)((LinkedHashMap)json).get("startDate");
+//		String endDate1 = (String)((LinkedHashMap)json).get("endDate");
+//		String target = (String)((LinkedHashMap)json).get("target");
+		
+		User user = (User)request.getSession().getAttribute("authUser");
+		
+    	Date startDate = new GregorianCalendar(2018, Calendar.JANUARY, 18).getTime();
+		Date endDate = new GregorianCalendar(2018, Calendar.FEBRUARY, 20).getTime();
+		
+		List<CategoryCostTotalDto> totalExpenses = costService.findTotalExpenseByUserInPeriod(user, startDate, endDate);
+		
+		
+		model.addAttribute( "startDate", startDate );
+		model.addAttribute( "endDate", endDate );
+        return new ModelAndView("parts/statisticsTable");
     }
 	
 }
