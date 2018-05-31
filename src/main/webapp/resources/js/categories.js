@@ -12,11 +12,11 @@ $(document).ready(function() {
             e.preventDefault();
 
             var $form = $(e.target),
-				cost_category_id  = $('#addCostForm').data("category_id"),
+				cost_category_id  = $('#addCostForm').attr("data-category_id"),
 				cost_date    = $form.find('[name="costDate"]').val(),
 				cost_amount    = $form.find('[name="amount"]').val(),
 				cost_description    = $form.find('[name="description"]').val(),
-				cost_currency    = $form.find('[name="currency"]').val();
+            	cost_currency_code = $('#currencyCode').val(); 
 
             $.ajax({
                 url: '/addCost/' + cost_category_id,
@@ -30,7 +30,7 @@ $(document).ready(function() {
                     cost_date: cost_date,
 					amount: cost_amount,
 					description: cost_description,
-					currency: cost_currency
+					currency_code: cost_currency_code
                 })
             ,success:function(response) {
                 // Hide the dialog
@@ -222,6 +222,10 @@ function deleteCategory(elem, id) {
 function addCost(id) {
 	
 	$('#addCostForm').attr("data-category_id",id);
+	
+	$('#addCostForm')
+	.find('[name="amount"]').val("").end()
+	.find('[name="description"]').val("").end();
 	
 	// Show the dialog
 	bootbox

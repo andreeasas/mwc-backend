@@ -78,7 +78,7 @@
 
 <!-- The form which is used to populate the item data -->
 <form id="editCategoryForm" method="post" class="form-horizontal" style="display: none;">
-	<div class="form-group">
+	<div class="form-group" style="display: none;">
         <label class="col-xs-3 control-label">ID</label>
         <div class="col-xs-3">
             <input type="text" class="form-control" name="id" disabled="disabled" />
@@ -138,11 +138,15 @@
     </div>
     
     <div class="form-group">
-        <label class="col-xs-3 control-label">Currency</label>
-        <div class="col-xs-3">
-            <input type="text" class="form-control" name="currency" value="EUR" disabled="disabled" />
-        </div>
-    </div>
+    	<label class="col-xs-3 control-label">Currency</label>
+    	<div class="col-xs-3">
+			<select class="selectpicker" id="currencyCode" style="margin:auto">
+			    <c:forEach var="code" items="${currencyCodes}">
+					<option>${code}</option>
+			   	</c:forEach>
+			</select>
+		</div>
+	</div>
 
     <div class="form-group">
         <div class="col-xs-5 col-xs-offset-3">

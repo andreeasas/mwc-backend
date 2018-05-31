@@ -40,7 +40,6 @@ public class CostController {
 	@Autowired
 	private MonetaryUnitService monetaryUnitService;
 	
-	
 	@SuppressWarnings("rawtypes")
 	@ResponseBody
 	@JsonView(Views.Public.class)
@@ -49,7 +48,7 @@ public class CostController {
 		
 		String amount = (String)((LinkedHashMap)json).get("amount");
 		String description = (String)((LinkedHashMap)json).get("description");
-		String currency = (String)((LinkedHashMap)json).get("currency");
+		String currencyCode = (String)((LinkedHashMap)json).get("currency_code");
 		String costDate = (String)((LinkedHashMap)json).get("cost_date");
 		
 		Cost cost = new Cost();
@@ -65,12 +64,12 @@ public class CostController {
 		}
 		cost.setCostDate(date);
 		
-		Category costCateg = categoryService.getById(id); // how connect to category ??
+		Category costCateg = categoryService.getById(id);
 		cost.setCategory(costCateg);
 		cost.setDbUser(costCateg.getDbUser());
 		cost.setMember(costCateg.getMember());
 		
-		cost.setUm(monetaryUnitService.getByCode(currency));
+		cost.setUm(monetaryUnitService.getByCode(currencyCode));
 		
 		costService.saveOrUpdate(cost);
 		

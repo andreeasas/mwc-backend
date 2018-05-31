@@ -21,6 +21,7 @@ import com.mwc.commands.Views;
 import com.mwc.domain.Category;
 import com.mwc.domain.User;
 import com.mwc.services.CategoryService;
+import com.mwc.services.MonetaryUnitService;
 
 
 @Controller
@@ -28,6 +29,9 @@ public class CategoryController {
 	
 	@Autowired
     private CategoryService categoryService;
+	
+	@Autowired
+	private MonetaryUnitService monetaryUnitService;
 
 	@RequestMapping(value = "/categories", method = RequestMethod.GET)
     public String registration(Model model, HttpServletRequest request) {
@@ -40,6 +44,9 @@ public class CategoryController {
     	
     	List<Category> memberCategories = categoryService.getMemberSpecific(user.getId());
     	model.addAttribute("memberSpecificCategories", memberCategories);
+    	
+		List<String> currenciesCodes = monetaryUnitService.findAllCurrenciesCodes();
+		model.addAttribute("currencyCodes", currenciesCodes);
 
         return "categories";
     }
