@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -65,10 +66,9 @@ public class StatisticsController {
 			e.printStackTrace();
 		}
 		
-		TotalStatisticsDto totalStatisticsDto = costService.findTotalExpensesInPeriod(user, member, startDate, endDate, statisticsType);
+		List<TotalStatisticsDto> totalStatisticsDtos = costService.findTotalExpensesWithCurrencyInPeriod(user, member, startDate, endDate, statisticsType);
 		
-		model.addAttribute( "totalExpenses", totalStatisticsDto.getCategoryCostSums());
-		model.addAttribute("total", totalStatisticsDto.getTotal());
+		model.addAttribute("statistics", totalStatisticsDtos);
         return new ModelAndView("parts/statisticsTable");
     }
 	

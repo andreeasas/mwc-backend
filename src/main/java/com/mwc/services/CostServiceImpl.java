@@ -1,5 +1,6 @@
 package com.mwc.services;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,9 +18,11 @@ import com.mwc.domain.Category;
 import com.mwc.domain.Cost;
 import com.mwc.domain.Member;
 import com.mwc.domain.User;
+import com.mwc.domain.views.CostPerCategoryView;
 import com.mwc.dto.CategoryCostTotalDto;
 import com.mwc.dto.TotalStatisticsDto;
 import com.mwc.repositories.CategoryRepository;
+import com.mwc.repositories.CostPerCategoryViewRepository;
 import com.mwc.repositories.CostRepository;
 import com.mwc.repositories.MonetaryUnitRepository;
 
@@ -37,6 +40,9 @@ public class CostServiceImpl implements CostService {
 	
 	@Autowired
 	private MonetaryUnitRepository monetaryUnitRepository;
+	
+	@Autowired
+	private CostPerCategoryViewRepository costCategViewRepository;
 
 	@Override
 	public void saveOrUpdate(Cost cost) {
@@ -99,10 +105,48 @@ public class CostServiceImpl implements CostService {
 	@Override
 	public List<TotalStatisticsDto> findTotalExpensesWithCurrencyInPeriod(User user, Member member, Date startDate, Date endDate, String statisticsType) {
 		
+		createDataInCostCategoryView(user, member, startDate, endDate, statisticsType);
+		
+		// find sum of expenses, percent from total - grouped on category and currency
+		List<Object[]> totalExpensesByCurrency = costCategViewRepository.findTotalExpensesByCurrency();
+		
+		List<CategoryCostTotalDto> costDtos = new ArrayList<CategoryCostTotalDto>();
+		for (Object[] array : totalExpensesByCurrency) {
+			CategoryCostTotalDto costDto = new CategoryCostTotalDto();
+			costDto.setCategName((String) array[0]);
+			costDto.setValue(((BigDecimal) array[1]).doubleValue());
+			costDto.setCurrency((String) array[2]);
+			costDto.setPercentFromTotal(((BigDecimal) array[3]).doubleValue());
+			
+			costDtos.add(costDto);
+		}
+		
+		// group results by currency
+		List<Object[]> totalCurrencyPairs = costCategViewRepository.findTotalCurrencyPairs();
+		
+		List<TotalStatisticsDto> statisticsDtos = new ArrayList<>();
+		for (Object[] array : totalCurrencyPairs) {
+			String currency = (String) array[0];
+			double total = ((BigDecimal) array[1]).doubleValue();
+			List<CategoryCostTotalDto> expensesDtos = costDtos.stream().filter(costDto -> costDto.getCurrency().equalsIgnoreCase(currency)).collect(Collectors.toList());			
+			
+			statisticsDtos.add(new TotalStatisticsDto(expensesDtos, total, currency));
+		}
+		
+		return statisticsDtos;
+	}
+
+	/**
+	 * insert data in auxiliary table
+	 * */
+	private void createDataInCostCategoryView(User user, Member member, Date startDate, Date endDate,
+			String statisticsType) {
+		
 		String queryText = //
 		" select categ.name as name, sum(cost.value) as val, um.code as currency" +
 		" from Cost as cost" + 
 		" inner join cost.category as categ" +
+		" left join cost.member as dbMember" +
 		" inner join cost.um as um" +
 		" where "+
 		addWhereClause(statisticsType) +
@@ -115,19 +159,16 @@ public class CostServiceImpl implements CostService {
 		@SuppressWarnings("unchecked")
 		List<Object[]> totalCostsInPeriod = query.getResultList();
 		
-		List<CategoryCostTotalDto> categoryCostDtos = new ArrayList<>();
+		List<CostPerCategoryView> costCategViews = new ArrayList<>();
 		
 		for (Object[] array : totalCostsInPeriod) {
-			CategoryCostTotalDto costDto = new CategoryCostTotalDto();
-			costDto.setCategName((String) array[0]);
-			costDto.setValue((Double) array[1]);
-			costDto.setCurrency((String) array[2]);
-			categoryCostDtos.add(costDto);
+			CostPerCategoryView costCategView = new CostPerCategoryView((String) array[0], (String) array[2]);
+			costCategView.setValue((Double) array[1]);
+			costCategViews.add(costCategView);
 		}
 		
-		categoryCostDtos.stream().filter(costDto -> costDto.getCurrency().equals("EUR")).collect(Collectors.toList());
-		
-		return null;
+		costCategViewRepository.deleteAll();
+		costCategViewRepository.save(costCategViews);
 	}
 
 	@Override
