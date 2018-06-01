@@ -247,7 +247,7 @@ public class CostServiceImpl implements CostService {
 	}
 
 	@Override
-	public ExpenseDateDto[] findExpensesByUserThisMonth(long userId, String currencyCode) {
+	public ExpenseDateDto[] findExpensesForUserThisMonth(long userId, String currencyCode) {
 		
 		Calendar calendar = GregorianCalendar.getInstance();
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
@@ -256,8 +256,29 @@ public class CostServiceImpl implements CostService {
 		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
 		Date lastDayOfMonth = calendar.getTime();
 		
-		List<Object[]> costsThisMonth = costRepository.getEverydayCostsByUserInPeriod(userId, firstDayOfMonth, lastDayOfMonth, currencyCode);
+		List<Object[]> costsThisMonth = costRepository.getDailyCostsForUserInPeriod(userId, firstDayOfMonth, lastDayOfMonth, currencyCode);
 		
+		List<ExpenseDateDto> expenseDateDtos = createExpenseDateTuples(costsThisMonth);
+		return expenseDateDtos.toArray(new ExpenseDateDto[expenseDateDtos.size()]);
+	}
+
+	@Override
+	public ExpenseDateDto[] findExpensesForMemberThisMonth(long memberId, String currencyCode) {
+		
+		Calendar calendar = GregorianCalendar.getInstance();
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		Date firstDayOfMonth = calendar.getTime();
+		
+		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+		Date lastDayOfMonth = calendar.getTime();
+		
+		List<Object[]> dailyCostsThisMonth = costRepository.getDailyCostsForMemberInPeriod(memberId, firstDayOfMonth, lastDayOfMonth, currencyCode);
+		
+		List<ExpenseDateDto> expenseDateDtos = createExpenseDateTuples(dailyCostsThisMonth);
+		return expenseDateDtos.toArray(new ExpenseDateDto[expenseDateDtos.size()]);
+	}
+	
+	private List<ExpenseDateDto> createExpenseDateTuples(List<Object[]> costsThisMonth) {
 		List<ExpenseDateDto> expenseDateDtos = new ArrayList<>();
 		costsThisMonth.forEach(cost -> {
 			ExpenseDateDto expenseDateDto = new ExpenseDateDto();
@@ -265,8 +286,7 @@ public class CostServiceImpl implements CostService {
 			expenseDateDto.setExpenseValue((double) cost[1]);
 			expenseDateDtos.add(expenseDateDto);
 		});
-		
-		return expenseDateDtos.toArray(new ExpenseDateDto[expenseDateDtos.size()]);
+		return expenseDateDtos;
 	}
 
 }

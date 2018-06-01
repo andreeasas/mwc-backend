@@ -19,7 +19,9 @@ public interface CostService {
     
     public List<Cost> findCostsByUserInPeriod(User user, Date startDate, Date endDate);
     
-    public ExpenseDateDto[] findExpensesByUserThisMonth(long userId, String currencyCode);
+    public ExpenseDateDto[] findExpensesForUserThisMonth(long userId, String currencyCode);
+    
+    public ExpenseDateDto[] findExpensesForMemberThisMonth(long memberId, String currencyCode);
     
     public List<Cost> findCostsByMemberInPeriod(Member member, Date startDate, Date endDate);
     

@@ -2,8 +2,6 @@ package com.mwc.controllers;
 
 
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
-import com.mwc.domain.Cost;
 import com.mwc.domain.Member;
 import com.mwc.domain.User;
 import com.mwc.dto.ExpenseDateDto;
@@ -88,21 +85,15 @@ public class UserController {
     	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     	User user = userService.findByUsername(authentication.getName());
-    	
     	List<Member> members = memberService.getAllByUserId(user.getId());
     	
     	request.getSession().setAttribute("authUser",user);
     	request.getSession().setAttribute("members",members);
     	request.getSession().setAttribute("selectedMember",members.get(0));
     	
-		ExpenseDateDto[] expenseDateDtos = costService.findExpensesByUserThisMonth(user.getId(),"EUR");
+		ExpenseDateDto[] expenseDateDtos = costService.findExpensesForUserThisMonth(user.getId(),"EUR");
 		
-		Gson gson = new Gson();
-		String expenseDateJson = gson.toJson(expenseDateDtos);
-		
-        ModelAndView modelAndView = new ModelAndView("welcome");
-        modelAndView.addObject("expenseDateTuple", expenseDateJson);
-		return modelAndView;
+		return createWelcomeModelView(expenseDateDtos);
     }
     
 	@RequestMapping(value = "/switchMember", method = RequestMethod.GET)
@@ -111,7 +102,18 @@ public class UserController {
         
 		request.getSession().setAttribute("selectedMember", memberService.getById(id));
 		
-        return new ModelAndView("welcome");
+		ExpenseDateDto[] expenseDateDtos = costService.findExpensesForMemberThisMonth(id, "EUR");
+		
+		return createWelcomeModelView(expenseDateDtos);
     }
+	
+	private ModelAndView createWelcomeModelView(ExpenseDateDto[] expenseDateDtos) {
+		Gson gson = new Gson();
+		String expenseDateJson = gson.toJson(expenseDateDtos);
+		
+		ModelAndView modelAndView = new ModelAndView("welcome");
+		modelAndView.addObject("expenseDateTuple", expenseDateJson);
+		return modelAndView;
+	}
 
 }

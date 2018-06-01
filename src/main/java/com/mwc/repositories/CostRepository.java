@@ -49,8 +49,18 @@ public interface CostRepository extends PagingAndSortingRepository<Cost, Long>, 
 			" and cost.um.code = :currency" +
 			" group by (cost.costDate)" +
 			" order by (cost.costDate)")
-    public List<Object[]> getEverydayCostsByUserInPeriod(@Param("userId") long userId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("currency") String currencyCode);
+    public List<Object[]> getDailyCostsForUserInPeriod(@Param("userId") long userId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("currency") String currencyCode);
 	
+	@Query( " select cost.costDate as day, sum(cost.value) as expenseInDay" +
+			" from Cost as cost " +
+			" left join cost.member as dbMember" +
+			" where dbMember.id = :memberId " +
+			" and cost.costDate >= :startDate and cost.costDate <= :endDate" +
+			" and cost.um.code = :currency" +
+			" group by (cost.costDate)" +
+			" order by (cost.costDate)")
+    public List<Object[]> getDailyCostsForMemberInPeriod(@Param("memberId") long memberId, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("currency") String currencyCode);
+    
 	@Query(" select categ.name as name, sum(cost.value) as val" +
 			" from Cost as cost" + 
 			" left join cost.category as categ" +
