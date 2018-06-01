@@ -31,4 +31,10 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, Pagin
 			" left join categ.member as dbMember" +
 			" where dbMember.dbUser.id = :userId")
 	List<Category> findAllMemberSpecific(@Param("userId") long userId);
+	
+	@Query(" select categ " +
+			" from Category as categ " +
+			" left join categ.member as dbMember" +
+			" where dbMember.id = :memberId")
+	List<Category> findByMemberId(@Param("memberId") long memberId);
 }

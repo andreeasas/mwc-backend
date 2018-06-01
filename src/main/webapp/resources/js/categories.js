@@ -48,6 +48,7 @@ $(document).ready(function() {
             e.preventDefault();
 
             var $form = $(e.target),
+            	cat_owner = $('#addCategoryForm').attr("data-category_owner"),
 				cat_name    = $form.find('[name="name"]').val();
 
             // The url and method might be different in your application
@@ -60,7 +61,8 @@ $(document).ready(function() {
 					'X-CSRF-TOKEN': $('meta[name="_csrf"]').attr('content')	
 				},
                 data: JSON.stringify({
-                    name: cat_name,
+                	owner: cat_owner,
+                    name: cat_name
                 })
             ,success:function(response) {
                 // Hide the dialog
@@ -153,8 +155,10 @@ function toggleIcon(e) {
         .toggleClass('glyphicon-plus glyphicon-minus');
 }
 
-function addCategory() {
-			
+function addCategory(categ_owner) {
+	
+	$('#addCategoryForm').attr("data-category_owner",categ_owner);
+	
 	// Show the dialog
 	bootbox
 		.dialog({

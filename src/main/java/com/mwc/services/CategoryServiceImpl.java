@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.mwc.domain.Category;
 import com.mwc.repositories.CategoryRepository;
-import com.mwc.repositories.MemberRepository;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -38,6 +37,11 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public void delete(long id) {
 		categoryRepository.delete(categoryRepository.findById(id));
+	}
+
+	@Override
+	public List<Category> findByMemberId(long memberId) {
+		return categoryRepository.findByMemberId(memberId);
 	}
 
 }

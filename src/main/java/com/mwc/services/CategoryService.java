@@ -3,7 +3,6 @@ package com.mwc.services;
 import java.util.List;
 
 import com.mwc.domain.Category;
-import com.mwc.domain.Cost;
 
 public interface CategoryService {
 	
@@ -16,5 +15,7 @@ public interface CategoryService {
 	public void saveOrUpdate(Category category);
 
     public void delete(long id);
+    
+    public List<Category> findByMemberId(long memberId);
 
 }

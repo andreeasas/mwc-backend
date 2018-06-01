@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.mwc.commands.AjaxResponseBody;
 import com.mwc.commands.Views;
 import com.mwc.domain.Category;
+import com.mwc.domain.Member;
 import com.mwc.domain.User;
 import com.mwc.services.CategoryService;
 import com.mwc.services.MonetaryUnitService;
@@ -42,7 +43,8 @@ public class CategoryController {
     	List<Category> userCategories = categoryService.getUserSpecific(user.getId());
     	model.addAttribute("userSpecificCategories", userCategories);
     	
-    	List<Category> memberCategories = categoryService.getMemberSpecific(user.getId());
+    	Member member = (Member)request.getSession().getAttribute("selectedMember");
+    	List<Category> memberCategories = categoryService.findByMemberId(member.getId());
     	model.addAttribute("memberSpecificCategories", memberCategories);
     	
 		List<String> currenciesCodes = monetaryUnitService.findAllCurrenciesCodes();
@@ -58,11 +60,20 @@ public class CategoryController {
         
 		@SuppressWarnings("rawtypes")
 		String name = (String)((LinkedHashMap)json).get("name");
-		User user = (User)request.getSession().getAttribute("authUser");
+		@SuppressWarnings("rawtypes")
+		String owner = (String)((LinkedHashMap)json).get("owner");
 		
 		Category category = new Category();
 		category.setName(name);
-		category.setDbUser(user);
+		
+		if (owner.equalsIgnoreCase("user")) {
+	        User user = (User)request.getSession().getAttribute("authUser");
+	        category.setDbUser(user);
+		}
+		if (owner.equalsIgnoreCase("member")) {
+			Member member = (Member)request.getSession().getAttribute("selectedMember");
+			category.setMember(member);
+		}
 		
 		categoryService.saveOrUpdate(category);
 		

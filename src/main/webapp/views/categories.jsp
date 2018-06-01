@@ -16,13 +16,14 @@
 <div class="container">
 
 <div class="row">
-
-<h2 class="col-md-6">Manage categories</h2>
-<button type="button" class="btn btn-info col-md-6 pull-right" style="width:25%;" onclick="addCategory()">Add category</button>
+	<h2 class="col-md-6">Manage categories</h2>
 </div>
 <hr class="hr-separator">
 
-<h3>User categories</h3>
+<div class="row">
+	<h3 class="col-md-6">User categories</h3>
+	<button type="button" class="btn btn-info col-md-6 pull-right" style="width:25%;" onclick="addCategory('user')">Add category</button>
+</div>
 <hr class="hr-separator-thin">
 
 <div class="panel-group" id="accordion-member-categories" role="tablist" aria-multiselectable="true">
@@ -49,7 +50,11 @@
 
 </div><!-- panel-group -->
 
-<h3>Member categories</h3>
+
+<div class="row">
+	<h3 class="col-md-6">Member categories</h3>
+	<button type="button" class="btn btn-info col-md-6 pull-right" style="width:25%;" onclick="addCategory('member')">Add category</button>
+</div>
 <hr class="hr-separator-thin">
 
 	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
