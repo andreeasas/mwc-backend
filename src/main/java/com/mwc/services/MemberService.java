@@ -7,7 +7,7 @@ public interface MemberService {
 	
 	List<Member> getAllByUserId(long userId);
 	
-	Member getById(Long id);
+	Member getById(long id);
 	
 	Member saveOrUpdate(Member member);
 

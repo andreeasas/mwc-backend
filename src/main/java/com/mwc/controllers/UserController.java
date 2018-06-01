@@ -14,17 +14,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mwc.commands.AjaxResponseBody;
-import com.mwc.commands.Views;
-import com.mwc.domain.Category;
 import com.mwc.domain.Member;
 import com.mwc.domain.User;
 import com.mwc.services.MemberService;
@@ -98,10 +92,10 @@ public class UserController {
     }
     
 	@RequestMapping(value = "/switchMember", method = RequestMethod.GET)
-    public ModelAndView deleteCategory(@RequestParam(value="id", required=false) long id,
+    public ModelAndView switchMember(@RequestParam(value="id", required=false) long id,
     		HttpServletRequest request, HttpServletResponse response) {
         
-		request.getSession().setAttribute("selectedMemberId", id);
+		request.getSession().setAttribute("selectedMember", memberService.getById(id));
 		
         return new ModelAndView("welcome");
     }
