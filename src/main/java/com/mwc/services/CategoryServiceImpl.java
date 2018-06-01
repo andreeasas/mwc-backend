@@ -44,4 +44,14 @@ public class CategoryServiceImpl implements CategoryService {
 		return categoryRepository.findByMemberId(memberId);
 	}
 
+	@Override
+	public Category findByMemberIdAndName(long memberId, String name) {
+		return categoryRepository.findByMemberIdAndName(memberId, name);
+	}
+
+	@Override
+	public Category findByUserIdAndName(long userId, String name) {
+		return categoryRepository.findByUserIdAndName(userId, name);
+	}
+
 }

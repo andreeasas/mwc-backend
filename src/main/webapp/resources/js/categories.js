@@ -38,9 +38,9 @@ $(document).ready(function() {
 
                 // You can inform the user that the data is updated successfully
                 // by highlighting the row or showing a message box
-                bootbox.alert('The category name is added');
+                bootbox.alert('The cost was added');
             }});
-        });
+    });
 	
 	$('#addCategoryForm')
         .on('submit', function(e) {
@@ -70,11 +70,15 @@ $(document).ready(function() {
 
                 // You can inform the user that the data is updated successfully
                 // by highlighting the row or showing a message box
-                bootbox.alert('The category name is added');
+                bootbox.alert('The category was added');
+            },error:function(response) {
+                // Hide the dialog
+                $form.parents('.bootbox').modal('hide');
+
+        		bootbox.alert(response.responseJSON.message);
             }});
-        });
-	
-	
+	});
+		
     $('#editCategoryForm')
         .on('submit', function(e) {
             // Save the form data via an Ajax request
@@ -104,9 +108,15 @@ $(document).ready(function() {
 
                 // You can inform the user that the data is updated successfully
                 // by highlighting the row or showing a message box
-                bootbox.alert('The category name is updated');
-            }});
-        });
+                bootbox.alert('The category name was updated');
+            },error:function(response) {
+	                // Hide the dialog
+	                $form.parents('.bootbox').modal('hide');
+
+	        		bootbox.alert(response.responseJSON.message);
+	        }
+        	});
+	});
 
     $('.editButton').on('click', function() {
         // Get the record's ID via attribute
@@ -220,6 +230,10 @@ function deleteCategory(elem, id) {
 		elem.closest(".panel").remove();
 		
 		bootbox.alert('The category was deleted.');
+	},error:function(response) {
+		elem.closest(".panel").remove();
+		
+		bootbox.alert(response.responseJSON.message);
 	}});
 }
 

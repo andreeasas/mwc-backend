@@ -1,5 +1,6 @@
 package com.mwc.controllers;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,7 +37,7 @@ public class CategoryController {
 	private MonetaryUnitService monetaryUnitService;
 
 	@RequestMapping(value = "/categories", method = RequestMethod.GET)
-    public String registration(Model model, HttpServletRequest request) {
+    public String prepareForm(Model model, HttpServletRequest request) {
         model.addAttribute("userForm", new User());
         
         User user = (User)request.getSession().getAttribute("authUser");
@@ -69,10 +71,18 @@ public class CategoryController {
 		if (owner.equalsIgnoreCase("user")) {
 	        User user = (User)request.getSession().getAttribute("authUser");
 	        category.setDbUser(user);
+	        
+	        if(categoryService.findByUserIdAndName(user.getId(), name)!=null) {
+	        	return sendErrorMssg(response, 400, "The category wasn't added, a category with this name already exists.");
+	        }
 		}
 		if (owner.equalsIgnoreCase("member")) {
 			Member member = (Member)request.getSession().getAttribute("selectedMember");
 			category.setMember(member);
+			
+			if(categoryService.findByMemberIdAndName(member.getId(), name)!=null) {
+				return sendErrorMssg(response, 400, "The category wasn't added, a category with this name already exists.");
+			}
 		}
 		
 		categoryService.saveOrUpdate(category);
@@ -84,6 +94,15 @@ public class CategoryController {
 		
         return ajaxResponse;
     }
+
+	private AjaxResponseBody sendErrorMssg(HttpServletResponse response, int errorCode, String mssg) {
+		try {
+			response.sendError(errorCode, mssg);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return new AjaxResponseBody();
+	}
 	
 	@ResponseBody
 	@JsonView(Views.Public.class)
@@ -96,6 +115,19 @@ public class CategoryController {
 		String name = (String)((LinkedHashMap)json).get("name");
 		
 		Category category = categoryService.getById(Long.valueOf(id).longValue());
+		
+		// make sure there's not a category with this name already
+		if (category.getDbUser()!=null) {
+			 if(categoryService.findByUserIdAndName(category.getDbUser().getId(), name) != null) {
+		        	return sendErrorMssg(response, 400, "The category wasn't updated, a category with this name already exists.");
+		        }
+		}
+		if (category.getMember()!=null) {
+			if(categoryService.findByMemberIdAndName(category.getMember().getId(), name) != null) {
+				return sendErrorMssg(response, 400, "The category wasn't updated, a category with this name already exists.");
+			}
+		}
+		
 		category.setName(name);
 		categoryService.saveOrUpdate(category);
 		
@@ -112,7 +144,19 @@ public class CategoryController {
 	@RequestMapping(value = "/deleteCategory/{id}", method = RequestMethod.DELETE)
     public AjaxResponseBody  deleteCategory(@PathVariable long id, HttpServletRequest request, HttpServletResponse response) {
         
-		categoryService.delete(id);		
+		try {
+			categoryService.delete(id);
+		} catch (DataIntegrityViolationException e) {
+			try {
+				if (e.getMessage().contains("constraint [EXPENSE.FK3EJJORP07RCJ5P4H42G6I1Q1P]")) {
+					response.sendError(500, "The category wasn't deleted because it has cost records.");
+				} else {
+					response.sendError(500, "The category couldn't be deleted because of database constraints.");
+				}
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
 		
 		AjaxResponseBody ajaxResponse = new AjaxResponseBody();
 		ajaxResponse.setCode("1");

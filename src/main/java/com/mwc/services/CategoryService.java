@@ -17,5 +17,9 @@ public interface CategoryService {
     public void delete(long id);
     
     public List<Category> findByMemberId(long memberId);
+    
+    public Category findByMemberIdAndName(long memberId, String name);
+    
+    public Category findByUserIdAndName(long userId, String name);
 
 }
