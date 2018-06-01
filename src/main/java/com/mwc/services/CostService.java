@@ -6,6 +6,7 @@ import java.util.List;
 import com.mwc.domain.Cost;
 import com.mwc.domain.Member;
 import com.mwc.domain.User;
+import com.mwc.dto.ExpenseDateDto;
 import com.mwc.dto.TotalStatisticsDto;
 
 public interface CostService {
@@ -17,6 +18,8 @@ public interface CostService {
     public void delete(Cost cost);
     
     public List<Cost> findCostsByUserInPeriod(User user, Date startDate, Date endDate);
+    
+    public ExpenseDateDto[] findExpensesByUserThisMonth(long userId, String currencyCode);
     
     public List<Cost> findCostsByMemberInPeriod(Member member, Date startDate, Date endDate);
     

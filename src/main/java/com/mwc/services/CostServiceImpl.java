@@ -3,7 +3,9 @@ package com.mwc.services;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +22,7 @@ import com.mwc.domain.Member;
 import com.mwc.domain.User;
 import com.mwc.domain.views.CostPerCategoryView;
 import com.mwc.dto.CategoryCostTotalDto;
+import com.mwc.dto.ExpenseDateDto;
 import com.mwc.dto.TotalStatisticsDto;
 import com.mwc.repositories.CategoryRepository;
 import com.mwc.repositories.CostPerCategoryViewRepository;
@@ -241,6 +244,29 @@ public class CostServiceImpl implements CostService {
 		});
 		
 		return new TotalStatisticsDto(costsDto, total.doubleValue());
+	}
+
+	@Override
+	public ExpenseDateDto[] findExpensesByUserThisMonth(long userId, String currencyCode) {
+		
+		Calendar calendar = GregorianCalendar.getInstance();
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		Date firstDayOfMonth = calendar.getTime();
+		
+		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+		Date lastDayOfMonth = calendar.getTime();
+		
+		List<Object[]> costsThisMonth = costRepository.getEverydayCostsByUserInPeriod(userId, firstDayOfMonth, lastDayOfMonth, currencyCode);
+		
+		List<ExpenseDateDto> expenseDateDtos = new ArrayList<>();
+		costsThisMonth.forEach(cost -> {
+			ExpenseDateDto expenseDateDto = new ExpenseDateDto();
+			expenseDateDto.setDateMili(((Date) cost[0]).getTime());
+			expenseDateDto.setExpenseValue((double) cost[1]);
+			expenseDateDtos.add(expenseDateDto);
+		});
+		
+		return expenseDateDtos.toArray(new ExpenseDateDto[expenseDateDtos.size()]);
 	}
 
 }

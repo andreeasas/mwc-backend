@@ -2,6 +2,8 @@ package com.mwc.controllers;
 
 
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,8 +21,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
+import com.mwc.domain.Cost;
 import com.mwc.domain.Member;
 import com.mwc.domain.User;
+import com.mwc.dto.ExpenseDateDto;
+import com.mwc.services.CostService;
 import com.mwc.services.MemberService;
 import com.mwc.services.SecurityService;
 import com.mwc.services.UserService;
@@ -40,6 +46,9 @@ public class UserController {
 
     @Autowired
     private UserValidator userValidator;
+    
+    @Autowired
+    private CostService costService;
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registration(Model model) {
@@ -75,20 +84,25 @@ public class UserController {
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
-    public String welcome(Model model, HttpServletRequest request) {
-//    	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public ModelAndView welcome(Model model, HttpServletRequest request) {
     	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     	User user = userService.findByUsername(authentication.getName());
     	
     	List<Member> members = memberService.getAllByUserId(user.getId());
     	
+    	request.getSession().setAttribute("authUser",user);
     	request.getSession().setAttribute("members",members);
     	request.getSession().setAttribute("selectedMember",members.get(0));
     	
-    	request.getSession().setAttribute("authUser",user);
-    	
-        return "welcome";
+		ExpenseDateDto[] expenseDateDtos = costService.findExpensesByUserThisMonth(user.getId(),"EUR");
+		
+		Gson gson = new Gson();
+		String expenseDateJson = gson.toJson(expenseDateDtos);
+		
+        ModelAndView modelAndView = new ModelAndView("welcome");
+        modelAndView.addObject("expenseDateTuple", expenseDateJson);
+		return modelAndView;
     }
     
 	@RequestMapping(value = "/switchMember", method = RequestMethod.GET)
@@ -99,4 +113,5 @@ public class UserController {
 		
         return new ModelAndView("welcome");
     }
+
 }
