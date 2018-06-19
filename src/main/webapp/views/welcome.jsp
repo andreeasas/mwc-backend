@@ -18,7 +18,7 @@
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
 
-        <h2>Welcome ${pageContext.request.userPrincipal.name}</h2>
+        <h2>Welcome ${loggedOne}</h2>
 
     </c:if>
     

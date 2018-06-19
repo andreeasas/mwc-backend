@@ -83,7 +83,6 @@ public class UserController {
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public ModelAndView welcome(Model model, HttpServletRequest request) {
     	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
     	User user = userService.findByUsername(authentication.getName());
     	List<Member> members = memberService.getAllByUserId(user.getId());
     	
@@ -92,27 +91,26 @@ public class UserController {
     	request.getSession().setAttribute("selectedMember",members.get(0));
     	
 		ExpenseDateDto[] expenseDateDtos = costService.findExpensesForUserThisMonth(user.getId(),"EUR");
-		
-		return createWelcomeModelView(expenseDateDtos);
+		return createWelcomeModelView(expenseDateDtos, user.getUsername());
     }
     
 	@RequestMapping(value = "/switchMember", method = RequestMethod.GET)
     public ModelAndView switchMember(@RequestParam(value="id", required=false) long id,
     		HttpServletRequest request, HttpServletResponse response) {
-        
-		request.getSession().setAttribute("selectedMember", memberService.getById(id));
+		Member selectedMember = memberService.getById(id);
+		request.getSession().setAttribute("selectedMember", selectedMember);
 		
 		ExpenseDateDto[] expenseDateDtos = costService.findExpensesForMemberThisMonth(id, "EUR");
-		
-		return createWelcomeModelView(expenseDateDtos);
+		return createWelcomeModelView(expenseDateDtos, selectedMember.getName());
     }
 	
-	private ModelAndView createWelcomeModelView(ExpenseDateDto[] expenseDateDtos) {
+	private ModelAndView createWelcomeModelView(ExpenseDateDto[] expenseDateDtos, String loggedOne) {
 		Gson gson = new Gson();
 		String expenseDateJson = gson.toJson(expenseDateDtos);
 		
 		ModelAndView modelAndView = new ModelAndView("welcome");
 		modelAndView.addObject("expenseDateTuple", expenseDateJson);
+		modelAndView.addObject("loggedOne",loggedOne);
 		return modelAndView;
 	}
 

@@ -17,12 +17,6 @@ public class MonetaryUnit implements Serializable {
 	  
 	  private String description;
 
-//	  @OneToMany( //
-//	  mappedBy = "um", //
-//	  cascade = { CascadeType.ALL } //
-//	  )
-//	  private Collection<UMDescription> descriptions;
-
 	  public MonetaryUnit() {
 	  }
 
@@ -47,14 +41,6 @@ public class MonetaryUnit implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
- 
-//	  public Collection<UMDescription> getDescriptions() {
-//	    return descriptions;
-//	  }
-//
-//	  public void setDescriptions(Collection<UMDescription> descriptions) {
-//	    this.descriptions = descriptions;
-//	  }
 
 	}
 

@@ -3,13 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>guru.springframework</groupId>
-	<artifactId>spring-boot-oracle</artifactId>
+	<groupId>com.mwc</groupId>
+	<artifactId>money-with-care</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>spring-boot-oracle</name>
-	<description>Demo project for Spring Boot and Oracle</description>
+	<description>Money with Care using Spring Boot and Oracle</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

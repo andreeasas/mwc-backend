@@ -6,7 +6,7 @@
     <%@ include file="parts/meta.jsp" %> 
     <meta name="_csrf" content="${_csrf.token}"/>
 	<meta name="_csrf_header" content="${_csrf.headerName}"/>
-    <title>Create an account</title>
+    <title>Manage categories</title>
     <%@ include file="parts/header.jsp" %> 
 </head>
 

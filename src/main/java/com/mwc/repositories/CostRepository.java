@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
 
+import com.mwc.domain.Category;
 import com.mwc.domain.Cost;
 import com.mwc.domain.Member;
 import com.mwc.domain.User;
@@ -18,6 +19,8 @@ import com.mwc.domain.User;
 @Repository
 @RepositoryRestResource(path="cost", collectionResourceRel="cost")
 public interface CostRepository extends PagingAndSortingRepository<Cost, Long>, CrudRepository<Cost, Long> {
+	
+	public List<Cost> findByDbUserAndCategory(@Param("dbUser") User dbUser,@Param("category") Category category);
 	
 	@Query(" from Cost as cost" + 
 			" where cost.dbUser = :user " +

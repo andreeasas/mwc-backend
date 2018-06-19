@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.mwc.commands.AjaxResponseBody;
@@ -37,22 +38,23 @@ public class CategoryController {
 	private MonetaryUnitService monetaryUnitService;
 
 	@RequestMapping(value = "/categories", method = RequestMethod.GET)
-    public String prepareForm(Model model, HttpServletRequest request) {
-        model.addAttribute("userForm", new User());
+    public ModelAndView prepareForm(Model model, HttpServletRequest request) {
+		ModelAndView modelAndView = new ModelAndView();
         
         User user = (User)request.getSession().getAttribute("authUser");
-    	
     	List<Category> userCategories = categoryService.getUserSpecific(user.getId());
-    	model.addAttribute("userSpecificCategories", userCategories);
     	
     	Member member = (Member)request.getSession().getAttribute("selectedMember");
     	List<Category> memberCategories = categoryService.findByMemberId(member.getId());
-    	model.addAttribute("memberSpecificCategories", memberCategories);
     	
 		List<String> currenciesCodes = monetaryUnitService.findAllCurrenciesCodes();
-		model.addAttribute("currencyCodes", currenciesCodes);
-
-        return "categories";
+		
+		modelAndView.addObject("userSpecificCategories", userCategories);
+		modelAndView.addObject("memberSpecificCategories", memberCategories);
+		modelAndView.addObject("currencyCodes", currenciesCodes);
+		modelAndView.setViewName("categories");
+		
+        return modelAndView;
     }
 	
 	@ResponseBody
