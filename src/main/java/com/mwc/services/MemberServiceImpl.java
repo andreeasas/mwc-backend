@@ -31,10 +31,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public void delete(Long id) {
+	public void delete(long id) {
 		memberRepository.delete(id);
-		
 	}
-	
 	
 }

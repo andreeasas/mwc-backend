@@ -11,5 +11,5 @@ public interface MemberService {
 	
 	Member saveOrUpdate(Member member);
 
-    void delete(Long id);
+    void delete(long id);
 }

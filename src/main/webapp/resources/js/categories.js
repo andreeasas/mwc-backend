@@ -178,11 +178,11 @@ function addCategory(categ_owner) {
 		})
 		.on('shown.bs.modal', function() {
 			$('#addCategoryForm')
-				.show()                             // Show the login form
+				.show()                             // Show the category form
 			 
 		})
 		.on('hide.bs.modal', function(e) {
-			// Bootbox will remove the modal (including the body which contains the login form)
+			// Bootbox will remove the modal (including the body which contains the category form)
 			// after hiding the modal
 			// Therefor, we need to backup the form
 			$('#addCategoryForm').hide().appendTo('body');

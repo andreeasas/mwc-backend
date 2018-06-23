@@ -33,6 +33,10 @@ public class User {
     )
     private List<Category> categories;
     
+    @OneToOne
+    @JoinColumn(name="currency")
+    private MonetaryUnit defaultCurrency;
+    
     public User() {
 	}
 
@@ -98,5 +102,13 @@ public class User {
 	public void setCategories(List<Category> categories) {
 		this.categories = categories;
 	}
-    
+
+	public MonetaryUnit getDefaultCurrency() {
+		return defaultCurrency;
+	}
+
+	public void setDefaultCurrency(MonetaryUnit defaultCurrency) {
+		this.defaultCurrency = defaultCurrency;
+	}
+	
 }
