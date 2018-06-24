@@ -17,7 +17,9 @@ public interface CostService {
     
     public void delete(Cost cost);
     
-    public List<Cost> findCostsByUserInPeriod(User user, Date startDate, Date endDate);
+    public List<List<Cost>> getAllCostsByUserThisMonth(User user);
+    
+    public List<List<Cost>> getAllCostsByMemberThisMonth(Member member);
     
     public ExpenseDateDto[] findExpensesForUserThisMonth(long userId, String currencyCode);
     

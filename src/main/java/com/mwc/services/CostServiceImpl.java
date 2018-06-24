@@ -68,12 +68,45 @@ public class CostServiceImpl implements CostService {
 	public void delete(Cost cost) {
 		costRepository.delete(cost);
 	}
-
+	
 	@Override
-	public List<Cost> findCostsByUserInPeriod(User user, Date startDate, Date endDate) {
-		return costRepository.getCostsByUserInPeriod(user, startDate, endDate);
+	public List<List<Cost>> getAllCostsByUserThisMonth(User user) {
+		Calendar calendar = GregorianCalendar.getInstance();
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		Date firstDayOfMonth = calendar.getTime();
+		
+		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+		Date lastDayOfMonth = calendar.getTime();
+		
+		List<String> categNames = costRepository.getCategWithCostsByUserInPeriod(user, firstDayOfMonth, lastDayOfMonth);
+		
+		ArrayList<List<Cost>> costsThisMonth = new ArrayList<List<Cost>>();
+		for (String categName: categNames) {
+			costsThisMonth.add(costRepository.getCostsByUserInPeriod(user, firstDayOfMonth, lastDayOfMonth, categName));
+		}
+		
+		return costsThisMonth;
 	}
-
+	
+	@Override
+	public List<List<Cost>> getAllCostsByMemberThisMonth(Member member) {
+		Calendar calendar = GregorianCalendar.getInstance();
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		Date firstDayOfMonth = calendar.getTime();
+		
+		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+		Date lastDayOfMonth = calendar.getTime();
+		
+		List<String> categNames = costRepository.getCategWithCostsByMemberInPeriod(member, firstDayOfMonth, lastDayOfMonth);
+		
+		ArrayList<List<Cost>> costsThisMonth = new ArrayList<List<Cost>>();
+		for (String categName: categNames) {
+			costsThisMonth.add(costRepository.getCostsByMemberInPeriod(member, firstDayOfMonth, lastDayOfMonth, categName));
+		}
+		
+		return costsThisMonth;
+	}
+ 
 	@Override
 	public List<Cost> findCostsByMemberInPeriod(Member member, Date startDate, Date endDate) {
 		return costRepository.getCostsByMemberInPeriod(member, startDate, endDate);

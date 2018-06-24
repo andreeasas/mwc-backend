@@ -1,6 +1,7 @@
 package com.mwc.controllers;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class CategoryController {
     	List<Category> userCategories = categoryService.getUserSpecific(user.getId());
     	
     	Member member = (Member)request.getSession().getAttribute("selectedMember");
-    	List<Category> memberCategories = categoryService.findByMemberId(member.getId());
+    	List<Category> memberCategories = member != null ? categoryService.findByMemberId(member.getId()) : Collections.emptyList();
     	
 		List<String> currenciesCodes = monetaryUnitService.findAllCurrenciesCodes();
 		

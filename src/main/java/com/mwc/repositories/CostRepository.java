@@ -22,10 +22,35 @@ public interface CostRepository extends PagingAndSortingRepository<Cost, Long>, 
 	
 	public List<Cost> findByDbUserAndCategory(@Param("dbUser") User dbUser,@Param("category") Category category);
 	
-	@Query(" from Cost as cost" + 
-			" where cost.dbUser = :user " +
+	@Query(	"select cost " +
+			" from Cost as cost" +
+			" left join cost.category as categ" +
+			" where categ.dbUser = :user " +
+			" and cost.costDate >= :startDate and cost.costDate <= :endDate" +
+			" and categ.name = :categName")
+    public List<Cost> getCostsByUserInPeriod(@Param("user") User user, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("categName") String categName);
+	
+	@Query(" select distinct categ.name" +
+			" from Cost as cost" +
+			" left join cost.category as categ" +
+			" where categ.dbUser = :user " +
 			" and cost.costDate >= :startDate and cost.costDate <= :endDate")
-    public List<Cost> getCostsByUserInPeriod(@Param("user") User user, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+    public List<String> getCategWithCostsByUserInPeriod(@Param("user") User user, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+	
+	@Query(	"select cost " +
+			" from Cost as cost" +
+			" left join cost.category as categ" +
+			" where categ.member = :member " +
+			" and cost.costDate >= :startDate and cost.costDate <= :endDate" +
+			" and categ.name = :categName")
+    public List<Cost> getCostsByMemberInPeriod(@Param("member") Member member, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("categName") String categName);
+	
+	@Query(" select distinct categ.name" +
+			" from Cost as cost" +
+			" left join cost.category as categ" +
+			" where categ.member = :member " +
+			" and cost.costDate >= :startDate and cost.costDate <= :endDate")
+    public List<String> getCategWithCostsByMemberInPeriod(@Param("member") Member member, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 	
 	@Query(" from Cost as cost" + 
 			" where cost.member = :member " +
