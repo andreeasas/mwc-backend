@@ -63,12 +63,6 @@ public class UserController {
         }
 
         userService.save(userForm);
-        
-        Member member = new Member();
-		member.setName(userForm.getUsername());
-		member.setUser(userForm);
-		
-		memberService.saveOrUpdate(member);
 
         securityService.autologin(userForm.getUsername(), userForm.getPasswordConfirm());
 
@@ -94,10 +88,9 @@ public class UserController {
     	
     	request.getSession().setAttribute("authUser",user);
     	request.getSession().setAttribute("members",members);
-    	
-    	if (members.size() > 0)
-    	{
-    		request.getSession().setAttribute("selectedMember",members.get(0));
+
+    	if (members.size()>0) {
+    	request.getSession().setAttribute("selectedMember",members.get(0));
     	}
     	
 		ExpenseDateDto[] expenseDateDtos = costService.findExpensesForUserThisMonth(user.getId(),"EUR");

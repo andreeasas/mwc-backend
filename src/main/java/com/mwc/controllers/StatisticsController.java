@@ -49,6 +49,9 @@ public class StatisticsController {
         
 		String start = (String)((LinkedHashMap)json).get("start_date");
 		String end = (String)((LinkedHashMap)json).get("end_date");
+		if (start.equals("") || end.equals("")) {
+			return new ModelAndView("parts/statisticsTable");
+		}
 		String statisticsType = (String)((LinkedHashMap)json).get("statistics_type");
 		
 		User user = (User)request.getSession().getAttribute("authUser");

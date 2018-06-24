@@ -29,7 +29,7 @@
         </ul>
       </li>
       <li><a href="${contextPath}/manageUser">Manage user</a></li>
-      <li><a href="#">Expenses</a></li>
+      <li><a href="${contextPath}/expenses">Expenses</a></li>
       <li><a href="${contextPath}/categories">Categories</a></li>
       <li><a href="${contextPath}/statistics">Statistics</a></li>
     </ul>
