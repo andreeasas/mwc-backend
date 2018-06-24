@@ -51,7 +51,7 @@ $(document).ready(function() {
             	cat_owner = $('#addCategoryForm').attr("data-category_owner"),
 				cat_name    = $form.find('[name="name"]').val();
 
-            // The url and method might be different in your application
+            // Async call
             $.ajax({
                 url: '/addCategory',
                 method: 'POST',
@@ -71,6 +71,28 @@ $(document).ready(function() {
                 // You can inform the user that the data is updated successfully
                 // by highlighting the row or showing a message box
                 bootbox.alert('The category was added');
+                
+                // Display category
+                $('#accordionUserCategories .panel.panel-default').first().before($('#categoryContainerHidden'));
+                var newCatContainerId = 'newCategory_'+response.result.id;
+                
+                $('#categoryContainerHidden').first().attr('id', newCatContainerId);
+                $('#' + newCatContainerId).css('display', 'block');
+                $('#' + newCatContainerId + ' .panel-heading').attr('id', 'heading_' + response.result.id);
+                $('#' + newCatContainerId + ' .panel-heading h4 a').attr('href', '#collapse_' + response.result.id);
+                $('#' + newCatContainerId + ' .panel-heading h4 a').attr('aria-controls', 'collapse_' + response.result.id);
+                
+                $('#' + newCatContainerId + ' .panel-heading h4 a').html('<i class="more-less glyphicon glyphicon-plus"></i>' + response.result.name);
+                
+                $('#' + newCatContainerId + ' .panel-collapse.collapse').attr('id', 'collapse_' + response.result.id);
+                $('#' + newCatContainerId + ' .panel-collapse.collapse').attr('aria-labelledby', 'heading_' + response.result.id);
+                
+                $('#' + newCatContainerId + ' .btn.btn-secondary').attr('onclick', `editCategory(${response.result.id}, 'name')`);
+                $('#' + newCatContainerId + ' .btn.btn-danger').attr('onclick', `deleteCategory($(this), ${response.result.id})`);
+                $('#' + newCatContainerId + ' .btn.btn-info').attr('onclick', `addCost(${response.result.id})`);
+                
+                $('#' + newCatContainerId + ' input').val(response.result.id);
+                
             },error:function(response) {
                 // Hide the dialog
                 $form.parents('.bootbox').modal('hide');

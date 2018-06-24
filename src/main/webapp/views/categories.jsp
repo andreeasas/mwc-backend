@@ -20,13 +20,13 @@
 </div>
 <hr class="hr-separator">
 
-<div class="row">
+<div class="row" id="userCategoriesHeader">
 	<h3 class="col-md-6">User categories</h3>
 	<button type="button" class="btn btn-info col-md-6 pull-right" style="width:25%;" onclick="addCategory('user')">Add category</button>
 </div>
 <hr class="hr-separator-thin">
 
-<div class="panel-group" id="accordion-member-categories" role="tablist" aria-multiselectable="true">
+<div class="panel-group" id="accordionUserCategories" role="tablist" aria-multiselectable="true">
 	<c:forEach var="category" items="${userSpecificCategories}" varStatus="loop">
 		<div class="panel panel-default">
             <div class="panel-heading" role="tab" id="heading_member_${loop.index}">
@@ -51,13 +51,13 @@
 </div><!-- panel-group -->
 
 
-<div class="row">
+<div class="row" id="memberCategoriesHeader">
 	<h3 class="col-md-6">Member categories</h3>
 	<button type="button" class="btn btn-info col-md-6 pull-right" style="width:25%;" onclick="addCategory('member')">Add category</button>
 </div>
 <hr class="hr-separator-thin">
 
-	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+	<div class="panel-group" id="accordionMemberCategories" role="tablist" aria-multiselectable="true">
 		<c:forEach var="category" items="${memberSpecificCategories}" varStatus="loop">
 			<div class="panel panel-default">
 	            <div class="panel-heading" role="tab" id="heading_${loop.index}">
@@ -77,7 +77,26 @@
 	            </div>
 	            <input type="hidden" value="${category.getId() }">
 	       	</div>
-		</c:forEach>      
+		</c:forEach>   
+		
+		<div class="panel panel-default" id="categoryContainerHidden" style="display: none">
+            <div class="panel-heading" role="tab" id="heading_category_hidden">
+                <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_category_hidden" aria-expanded="true" aria-controls="collapse_category_hidden">
+                        <i class="more-less glyphicon glyphicon-plus"></i>
+                        category_name
+                    </a>
+                </h4>
+            </div>
+            <div id="collapse_category_hidden" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_category_hidden">
+                <div class="panel-body">
+                      <button type="button" class="btn btn-secondary" onclick="editCategory(0, '')">Edit category</button>
+                      <button type="button" class="btn btn-danger" onclick="deleteCategory($(this), 0)">Delete category</button>
+                      <button type="button" class="btn btn-info" onclick="addCost(0)">Add cost</button>
+                </div>
+            </div>
+            <input type="hidden" value="0">
+       	</div>   
 	</div><!-- panel-group -->
 
 
