@@ -73,8 +73,8 @@ $(document).ready(function() {
                 bootbox.alert('The category was added');
                 
                 // Display category
-                $('#accordionUserCategories .panel.panel-default').first().before($('#categoryContainerHidden'));
-                var newCatContainerId = 'newCategory_'+response.result.id;
+                $('#accordionUserCategories').prepend($('#categoryContainerHidden').clone());
+                var newCatContainerId = 'category_'+response.result.id;
                 
                 $('#categoryContainerHidden').first().attr('id', newCatContainerId);
                 $('#' + newCatContainerId).css('display', 'block');
@@ -87,7 +87,7 @@ $(document).ready(function() {
                 $('#' + newCatContainerId + ' .panel-collapse.collapse').attr('id', 'collapse_' + response.result.id);
                 $('#' + newCatContainerId + ' .panel-collapse.collapse').attr('aria-labelledby', 'heading_' + response.result.id);
                 
-                $('#' + newCatContainerId + ' .btn.btn-secondary').attr('onclick', `editCategory(${response.result.id}, 'name')`);
+                $('#' + newCatContainerId + ' .btn.btn-secondary').attr('onclick', `editCategory(${response.result.id}, '${response.result.name}')`);
                 $('#' + newCatContainerId + ' .btn.btn-danger').attr('onclick', `deleteCategory($(this), ${response.result.id})`);
                 $('#' + newCatContainerId + ' .btn.btn-info').attr('onclick', `addCost(${response.result.id})`);
                 
@@ -131,6 +131,11 @@ $(document).ready(function() {
                 // You can inform the user that the data is updated successfully
                 // by highlighting the row or showing a message box
                 bootbox.alert('The category name was updated');
+                
+                // Display new category name
+                var catContainerId = 'category_'+cat_id;
+                $('#' + catContainerId + ' .panel-heading h4 a').html('<i class="more-less glyphicon glyphicon-plus"></i>' + cat_name);
+                
             },error:function(response) {
 	                // Hide the dialog
 	                $form.parents('.bootbox').modal('hide');

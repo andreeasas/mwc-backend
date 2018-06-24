@@ -28,7 +28,7 @@
 
 <div class="panel-group" id="accordionUserCategories" role="tablist" aria-multiselectable="true">
 	<c:forEach var="category" items="${userSpecificCategories}" varStatus="loop">
-		<div class="panel panel-default">
+		<div class="panel panel-default" id="category_${category.getId()}">
             <div class="panel-heading" role="tab" id="heading_member_${loop.index}">
                 <h4 class="panel-title">
                     <a role="button" data-toggle="collapse" data-parent="#accordion-member-categories" href="#collapse_member_${loop.index}" aria-expanded="true" aria-controls="collapse_member_${loop.index}">
@@ -78,26 +78,26 @@
 	            <input type="hidden" value="${category.getId() }">
 	       	</div>
 		</c:forEach>   
-		
-		<div class="panel panel-default" id="categoryContainerHidden" style="display: none">
-            <div class="panel-heading" role="tab" id="heading_category_hidden">
-                <h4 class="panel-title">
-                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_category_hidden" aria-expanded="true" aria-controls="collapse_category_hidden">
-                        <i class="more-less glyphicon glyphicon-plus"></i>
-                        category_name
-                    </a>
-                </h4>
-            </div>
-            <div id="collapse_category_hidden" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_category_hidden">
-                <div class="panel-body">
-                      <button type="button" class="btn btn-secondary" onclick="editCategory(0, '')">Edit category</button>
-                      <button type="button" class="btn btn-danger" onclick="deleteCategory($(this), 0)">Delete category</button>
-                      <button type="button" class="btn btn-info" onclick="addCost(0)">Add cost</button>
-                </div>
-            </div>
-            <input type="hidden" value="0">
-       	</div>   
 	</div><!-- panel-group -->
+	
+<div class="panel panel-default" id="categoryContainerHidden" style="display: none">
+    <div class="panel-heading" role="tab" id="heading_category_hidden">
+        <h4 class="panel-title">
+            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_category_hidden" aria-expanded="true" aria-controls="collapse_category_hidden">
+                <i class="more-less glyphicon glyphicon-plus"></i>
+                category_name
+            </a>
+        </h4>
+    </div>
+    <div id="collapse_category_hidden" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_category_hidden">
+        <div class="panel-body">
+              <button type="button" class="btn btn-secondary" onclick="editCategory(0, '')">Edit category</button>
+              <button type="button" class="btn btn-danger" onclick="deleteCategory($(this), 0)">Delete category</button>
+              <button type="button" class="btn btn-info" onclick="addCost(0)">Add cost</button>
+        </div>
+    </div>
+    <input type="hidden" value="0">
+</div>   
 
 
 <!-- The form which is used to populate the item data -->
