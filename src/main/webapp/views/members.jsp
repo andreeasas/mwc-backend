@@ -47,12 +47,12 @@
 </div>
 <hr class="hr-separator-thin">
 	
-<div class="panel-group" id="according-member-categories" role="tablist" aria-multiselectable="true">
+<div class="panel-group" id="accordionMembers" role="tablist" aria-multiselectable="true">
 	<c:forEach var="member" items="${members}" varStatus="loop">
 		<div class="panel panel-default">
             <div class="panel-heading" role="tab" id="heading_member_${loop.index}">
                 <h4 class="panel-title">
-                    <a role="button" data-toggle="collapse" data-parent="#according-member-categories" href="#collapse_member_${loop.index}" aria-expanded="true" aria-controls="collapse_member_${loop.index}">
+                    <a role="button" data-toggle="collapse" data-parent="#accordionMembers" href="#collapse_member_${loop.index}" aria-expanded="true" aria-controls="collapse_member_${loop.index}">
                         <i class="more-less glyphicon glyphicon-plus"></i>
                         ${member.getName() }
                     </a>
@@ -67,8 +67,25 @@
             <input type="hidden" value="${member.getId() }">
        	</div>
 	</c:forEach>      
-
-</div><!-- panel-group -->	
+</div><!-- panel-group -->
+	
+<div class="panel panel-default" id="memberContainerHidden" style="display: none">
+            <div class="panel-heading" role="tab" id="heading_member_hidden">
+                <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion-member-categories" href="#collapse_member_hidden" aria-expanded="true" aria-controls="collapse_member_hidden">
+                        <i class="more-less glyphicon glyphicon-plus"></i>
+                        member_name
+                    </a>
+                </h4>
+            </div>
+            <div id="collapse_member_hidden" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_member_hidden">
+                <div class="panel-body">
+                      <button type="button" class="btn btn-secondary" onclick="editMember(0, '')">Edit member</button>
+                      <button type="button" class="btn btn-danger" onclick="deleteMember(this), 0)">Delete member</button>
+                </div>
+            </div>
+            <input type="hidden" value="${member.getId() }">
+</div>
 
 <!-- modal form - add member -->
 <form id="addMemberForm" method="post" class="form-horizontal" style="display: none;">

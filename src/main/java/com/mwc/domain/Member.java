@@ -12,6 +12,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.mwc.commands.Views;
+
 @Entity
 public class Member implements Serializable {
 	  private static final long serialVersionUID = 1L;
@@ -20,7 +23,10 @@ public class Member implements Serializable {
 	  @Column(name = "ID")
 	  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member_gen")
 	  @SequenceGenerator(initialValue = 1, sequenceName = "seq_gen_members", name = "member_gen")
+	  @JsonView(Views.Public.class)
 	  private long id;
+	  
+	  @JsonView(Views.Public.class)
 	  private String name;
 
 	  @ManyToOne

@@ -21,12 +21,35 @@ $(document).ready(function() {
                 name: member_name
             })
         ,success:function(response) {
-            // Hide the dialog
+            debugger;
+        	// Hide the dialog
             $form.parents('.bootbox').modal('hide');
 
             // You can inform the user that the data is updated successfully
             // by highlighting the row or showing a message box
             bootbox.alert('The member was added');
+            
+            // Display member
+            $('#accordionMembers').prepend($('#memberContainerHidden').clone());
+            debugger
+            var newMemberContainerId = 'member_'+response.result.id;
+            
+            $('#memberContainerHidden').first().attr('id', newMemberContainerId);
+            $('#' + newMemberContainerId).css('display', 'block');
+            $('#' + newMemberContainerId + ' .panel-heading').attr('id', 'heading_' + response.result.id);
+            $('#' + newMemberContainerId + ' .panel-heading h4 a').attr('href', '#collapse_' + response.result.id);
+            $('#' + newMemberContainerId + ' .panel-heading h4 a').attr('aria-controls', 'collapse_' + response.result.id);
+            
+            $('#' + newMemberContainerId + ' .panel-heading h4 a').html('<i class="more-less glyphicon glyphicon-plus"></i>' + response.result.name);
+            
+            $('#' + newMemberContainerId + ' .panel-collapse.collapse').attr('id', 'collapse_' + response.result.id);
+            $('#' + newMemberContainerId + ' .panel-collapse.collapse').attr('aria-labelledby', 'heading_' + response.result.id);
+            
+            $('#' + newMemberContainerId + ' .btn.btn-secondary').attr('onclick', `editMember(${response.result.id}, '${response.result.name}')`);
+            $('#' + newMemberContainerId + ' .btn.btn-danger').attr('onclick', `deleteMember($(this), ${response.result.id})`);
+            
+            $('#' + newMemberContainerId + ' input').val(response.result.id);
+            
         },error:function(response) {
             // Hide the dialog
             $form.parents('.bootbox').modal('hide');
