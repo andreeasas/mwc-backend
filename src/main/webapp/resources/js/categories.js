@@ -73,7 +73,12 @@ $(document).ready(function() {
                 bootbox.alert('The category was added');
                 
                 // Display category
+                if (cat_owner =='user'){
                 $('#accordionUserCategories').prepend($('#categoryContainerHidden').clone());
+                }
+                else {
+                	$('#accordionMemberCategories').prepend($('#categoryContainerHidden').clone());	
+                }
                 var newCatContainerId = 'category_'+response.result.id;
                 
                 $('#categoryContainerHidden').first().attr('id', newCatContainerId);
@@ -258,7 +263,6 @@ function deleteCategory(elem, id) {
 		
 		bootbox.alert('The category was deleted.');
 	},error:function(response) {
-		elem.closest(".panel").remove();
 		
 		bootbox.alert(response.responseJSON.message);
 	}});
